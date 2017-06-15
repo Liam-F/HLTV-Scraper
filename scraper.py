@@ -410,5 +410,5 @@ def getPlayerStats(matchID):
                 playerArray.append(matchID)
                 masterArray.append(playerArray)
         except IndexError:
-                print("Error with %s" % (matchID))
+                print("Player stats error with %s" % (matchID))
     return masterArray
