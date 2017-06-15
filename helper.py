@@ -31,7 +31,7 @@ def addNewLine(file):
 def tabulate(csvFile, array):
     # Files must be in the csv directory inside the project folder
     # Opens the CSV file
-    with open("csv/%s.csv" % (csvFile), 'a', encoding='utf-8') as f:
+    with open("csv/%s.csv" % (csvFile), 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         # Adds a new line if there is not one present
         addNewLine("csv/%s.csv" % (csvFile))

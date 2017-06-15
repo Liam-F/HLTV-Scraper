@@ -345,6 +345,7 @@ def getPlayerStats(matchID):
             adr[i] = (adr[i].replace("<td class=\"adr text-center \">", "")).replace("</td>", "")
     else:
         print("No player ADR for %s" % (matchID))
+        # Add blank items for when data is missing; number may need adjustment if we do BO7s later
         adr = [""] * 70
 
     # Find player KAST%
@@ -354,13 +355,25 @@ def getPlayerStats(matchID):
             kast[i] = (kast[i].replace("<td class=\"kast text-center\">", "")).replace("%</td>", "")
     else:
         print("No player KAST ratio for %s" % (matchID))
+        # Add blank items for when data is missing; number may need adjustment if we do BO7s later
         kast = [""] * 70
 
     # Find player rating
     rating = re.findall('<td class=\"rating text-center\">.*</td>', html)
+    nonNumbers = []
     if len(rating) > 0:
         for i in range(0, len(rating)):
             rating[i] = (rating[i].replace("<td class=\"rating text-center\">", "")).replace("</td>", "")
+            # Check if the value returned is a float, if not append it to a list for removal
+            try:
+                float(rating[i])
+            except ValueError:
+                nonNumbers.append(rating[i])
+        # Remove duplicate non-float values
+        nonNumbers = list(set(nonNumbers))
+        # Remove non-float values from the array of player ratings
+        for i in range(0, len(nonNumbers)):
+            rating[:] = [value for value in rating if value != nonNumbers[i]]
     else:
         print("No player Rating for %s" % (matchID))
         return []
