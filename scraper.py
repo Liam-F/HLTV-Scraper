@@ -386,26 +386,29 @@ def getPlayerStats(matchID):
     for i in range(0, len(maps)):
         # Arrays have data for multiple matches, so this offsets us by the amount to get each map separately
         offset = 10 * (i+1)
-        for b in range(0, 5):
-            playerArray = []
-            playerArray.append(maps[i])
-            playerArray.append(players[b+offset])
-            playerArray.append(kills[b+offset])
-            playerArray.append(deaths[b+offset])
-            playerArray.append(adr[b+offset])
-            playerArray.append(kast[b+offset])
-            playerArray.append(rating[b+offset])
-            playerArray.append(matchID)
-            masterArray.append(playerArray)
-        for b in range(5, 10):
-            playerArray = []
-            playerArray.append(maps[i])
-            playerArray.append(players[b+offset])
-            playerArray.append(kills[b+offset])
-            playerArray.append(deaths[b+offset])
-            playerArray.append(adr[b+offset])
-            playerArray.append(kast[b+offset])
-            playerArray.append(rating[b+offset])
-            playerArray.append(matchID)
-            masterArray.append(playerArray)
+        try:
+            for b in range(0, 5):
+                playerArray = []
+                playerArray.append(maps[i])
+                playerArray.append(players[b+offset])
+                playerArray.append(kills[b+offset])
+                playerArray.append(deaths[b+offset])
+                playerArray.append(adr[b+offset])
+                playerArray.append(kast[b+offset])
+                playerArray.append(rating[b+offset])
+                playerArray.append(matchID)
+                masterArray.append(playerArray)
+            for b in range(5, 10):
+                playerArray = []
+                playerArray.append(maps[i])
+                playerArray.append(players[b+offset])
+                playerArray.append(kills[b+offset])
+                playerArray.append(deaths[b+offset])
+                playerArray.append(adr[b+offset])
+                playerArray.append(kast[b+offset])
+                playerArray.append(rating[b+offset])
+                playerArray.append(matchID)
+                masterArray.append(playerArray)
+        except IndexError:
+                print("Error with %s" % (matchID))
     return masterArray
