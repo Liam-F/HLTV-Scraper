@@ -1,25 +1,26 @@
-from html import getHTML
+from html import get_html
 import re
 
 
 print("Initialized script.")
 
 
-def getMatchIDs(stop):
+def get_match_ids(stop):
     # Create an offset variable for lists that are paginated on HLTV
     offset = 0
 
     # Create an array of all of the Demo URLs on the page
-    matchIDs = findMatchIDsAtURL("https://www.hltv.org/results?offset=%s" % (offset))
+    matchIDs = find_match_ids_at_url("https://www.hltv.org/results?offset=%s" % (offset))
 
     # Determine if we need to paginate and create a variable to keep track of pages
-    morePages = endCheck(matchIDs, stop)
+    morePages = end_check(matchIDs, stop)
     page = 1
-    print("Parsed page %s. %s IDs found so far." % (page, len(matchIDs)))
+    length = len(matchIDs)
+    print(f"Parsed page {page}. {length} IDs found so far.")
     while morePages:
         # Offset by 100 to get the next 100 matches
         offset += 100
-        moreMatchIDs = findMatchIDsAtURL("https://www.hltv.org/results?offset=%s" % (offset))
+        moreMatchIDs = find_match_ids_at_url("https://www.hltv.org/results?offset=%s" % (offset))
 
         # Append the new IDs to the master list
         for m in moreMatchIDs:
@@ -27,12 +28,13 @@ def getMatchIDs(stop):
 
         # Continue paginating and updating the user
         page += 1
-        print("Parsed page %s. %s IDs found so far." % (page, len(matchIDs)))
-        morePages = endCheck(matchIDs, stop)
+        length = len(matchIDs)
+        print(f"Parsed page {page}. {length} IDs found so far.")
+        morePages = end_check(matchIDs, stop)
 
     # Ensure that there have been no changes to the page layout
     if len(matchIDs) % 100 != 0:
-        print("HLTV altered results page layout for offset %s" % (offset))
+        print(f"HLTV altered results page layout for offset {offset}")
 
     # Determines where to stop the array
     slice = matchIDs.index(stop)
@@ -48,19 +50,19 @@ def getMatchIDs(stop):
 
     # Reverse the array so the most recent match is last
     matchIDs = matchIDs[::-1]
-    print("Parsed %s page(s)." % (page))
+    print(f"Parsed {page} page(s).")
     return matchIDs
 
 
-def endCheck(matchIDs, stop):
+def end_check(matchIDs, stop):
     if stop in matchIDs:
         return False
     return True
 
 
-def findMatchIDsAtURL(url):
-    # Get the HTML using getHTML()
-    html = getHTML(url)
+def find_match_ids_at_url(url):
+    # Get the HTML using get_html()
+    html = get_html(url)
 
     # Create an array of all of the Match URLs on the page
     matchIDs = re.findall('"(.*?000"><a href="/matches/.*?)"', html)

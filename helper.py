@@ -1,25 +1,26 @@
 from multiprocessing.dummy import Pool as ThreadPool
-from html import getHTML
+from html import get_html
 import csv
 import sys
 
 
 def scrape(array, function, threads):
-        # Define the number of threads
-        pool = ThreadPool(threads)
+    # Define the number of threads
+    pool = ThreadPool(threads)
 
-        # Tell the user what is happening
-        print("Scraping %s items using %s on %s threads." % (len(array), function, threads))
+    # Tell the user what is happening
+    length = len(array)
+    print(f"Scraping {length} items using {function} on {threads} threads.")
 
-        # Calls get() and adds the filesize returned each call to an array called filesizes
-        result = pool.map(function, array)
-        pool.close()
-        pool.join()
-        return result
+    # Calls get() and adds the filesize returned each call to an array called filesizes
+    result = pool.map(function, array)
+    pool.close()
+    pool.join()
+    return result
 
 
 # Handle an error where data is not added to the end of the CSV file.
-def addNewLine(file):
+def add_new_line(file):
     # Add a newline to the end of the file if there is not one
     with open(file, "r+") as f:
         f.seek(0, 2)
@@ -34,19 +35,20 @@ def tabulate(csvFile, array):
     with open("csv/%s.csv" % (csvFile), 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         # Adds a new line if there is not one present
-        addNewLine("csv/%s.csv" % (csvFile))
+        # add_new_line("csv/%s.csv" % (csvFile))
         # Add the array passed in to the CSV file
         for i in range(0, len(array)):
             if len(array[i]) > 0:
                 writer.writerow(array[i])
-        print("Succesfully tabulated %s rows to %s.csv." % (len(array), csvFile))
+    length = len(array)
+    print(f"Succesfully tabulated {length} rows to {csvFile}.csv.")
     return True
 
 
-def getExistingData(csvFile, colNum):
+def get_existing_data(csvFile, colNum):
     # Add the values in colNum in csvFile to an array
     array = []
-    print("Reading data from %s.csv." % (csvFile))
+    print(f"Reading data from {csvFile}.csv.")
     with open("csv/%s.csv" % (csvFile), encoding='utf-8') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
@@ -54,10 +56,10 @@ def getExistingData(csvFile, colNum):
     return array
 
 
-def findMax(csvFile, colNum):
+def find_max(csvFile, colNum):
     # Find the maximum value in a column in an array
     array = []
-    print("Reading data from %s.csv." % (csvFile))
+    print(f"Reading data from {csvFile}.csv.")
     with open("csv/%s.csv" % (csvFile), encoding='utf-8') as csvfile:
         next(csvfile)
         readCSV = csv.reader(csvfile, delimiter=',')
@@ -66,18 +68,19 @@ def findMax(csvFile, colNum):
     return max(array)
 
 
-def removeExistingData(existing, new):
+def remove_existing_data(existing, new):
     # Remove data we already have from the list of new data to parse
     for i in new[:]:
         if i in existing:
             new.remove(i)
     # Convert new values to a set to remove duplicates, then back to a list
     new = list(set(new))
-    print("%s new items to add." % (len(new)))
+    length = len(new)
+    print(f"{length} new items to add.")
     return new
 
 
-def unDimension(array, item):
+def un_dimension(array, item):
     # Pulls specific items from an multi-dimensional array and returns them to one array
     result = []
     for i in range(0, len(array)):
@@ -85,7 +88,7 @@ def unDimension(array, item):
     return result
 
 
-def fixArray(array, value):
+def fix_array(array, value):
     # Used to clean match info results for matches with more than one map
     for i in range(0, len(array)):
         if len(array[i]) < value:
@@ -95,7 +98,7 @@ def fixArray(array, value):
     return array
 
 
-def fixPlayerStats(array):
+def fix_player_stats(array):
     # Used to clean match info results for matches with more than one map
     newArray = []
     for i in range(0, len(array)):
@@ -104,20 +107,20 @@ def fixPlayerStats(array):
     return newArray
 
 
-def getNewIterableItems(page, startID):
+def get_new_iterable_items(page, startID):
     # Iterate through unique IDs until we get the last one, then return them to a list
-    print("Checking for new %ss. This may take awhile." % (page))
+    print(f"Checking for new {page}s. This may take awhile.")
     check = True
     array = []
     while check:
         startID += 1
-        html = getHTML("https://www.hltv.org/%s/%s/a" % (page, startID))
+        html = get_html(f"https://www.hltv.org/{page}/{startID}/a")
         if html is None:
             check = False
         else:
             sys.stdout.write('\r'+"New %s found: %s" % (page, startID))
             sys.stdout.flush()
             array.append(startID)
-
-    print("\nFound %s new %ss." % (len(array), page))
+    length = len(array)
+    print(f"\nFound {length} new {page}s.")
     return array

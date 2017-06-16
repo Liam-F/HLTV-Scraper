@@ -1,13 +1,13 @@
-from html import getHTML
+from html import get_html
 import re
 from datetime import datetime
 from string import digits
 
 
-def getEventNames(eventID):
-    html = getHTML("https://www.hltv.org/results?offset=0&event=%s" % (eventID))
+def get_event_names(eventID):
+    html = get_html("https://www.hltv.org/results?offset=0&event=%s" % (eventID))
     if html is None:
-        print("Failed for %s" % (eventID))
+        print(f"Failed for {eventID}")
         return []
     # Find the type of event (online, LAN, etc)
     eventType = re.findall(' <div class=\".*text-ellipsis\">', html)
@@ -42,10 +42,10 @@ def getEventNames(eventID):
     return result
 
 
-def getMatchEvents(matchID):
-    html = getHTML("https://www.hltv.org/matches/%s" % (matchID))
+def get_match_events(matchID):
+    html = get_html("https://www.hltv.org/matches/%s" % (matchID))
     if html is None:
-        print("Failed for %s" % (matchID))
+        print(f"Failed for {matchID}")
         return []
     # Find the type of event (online, LAN, etc)
     eventName = re.findall('\"/events/.*/', html)
@@ -66,10 +66,10 @@ def getMatchEvents(matchID):
     return array
 
 
-def getTeams(teamID):
-    html = getHTML("https://www.hltv.org/team/%s/a" % (teamID))
+def get_teams(teamID):
+    html = get_html("https://www.hltv.org/team/%s/a" % (teamID))
     if html is None:
-        print("Failed for %s" % (teamID))
+        print(f"Failed for {teamID}")
         return []
     # Find the type of event (online, LAN, etc)
     teamName = re.findall('<div><span class=\"subjectname\">.*</span><br><i', html)
@@ -102,10 +102,10 @@ def getTeams(teamID):
     return array
 
 
-def getMatchInfo(matchID):
-    html = getHTML("https://www.hltv.org/matches/%s" % (matchID))
+def get_match_info(matchID):
+    html = get_html("https://www.hltv.org/matches/%s" % (matchID))
     if html is None:
-        print("Failed for %s" % (matchID))
+        print(f"Failed for {eventID}")
         return []
     # Search variables data-unix="
     date = re.findall('data-unix=\".*\"', html)
@@ -224,11 +224,11 @@ def getMatchInfo(matchID):
     return result
 
 
-def getMatchLineups(matchID):
+def get_match_lineups(matchID):
     # Set some vars for later
-    html = getHTML("https://www.hltv.org/matches/%s" % (matchID))
+    html = get_html("https://www.hltv.org/matches/%s" % (matchID))
     if html is None:
-        print("Failed for %s" % (matchID))
+        print(f"Failed for {eventID}")
         return []
     playerIDs = re.findall('<a href=\"/player/.*/', html)
 
@@ -261,10 +261,10 @@ def getMatchLineups(matchID):
         return []
 
 
-def getPlayers(playerID):
-    html = getHTML("https://www.hltv.org/player/%s/a" % (playerID))
+def get_players(playerID):
+    html = get_html("https://www.hltv.org/player/%s/a" % (playerID))
     if html is None:
-        print("Failed for %s" % (playerID))
+        print(f"Failed for {playerID}")
         return []
     # Find the type of event (online, LAN, etc)
     playerName = re.findall('Complete statistics for.*</a>', html)
@@ -295,10 +295,10 @@ def getPlayers(playerID):
     return array
 
 
-def getPlayerStats(matchID):
-    html = getHTML("https://www.hltv.org/matches/%s" % (matchID))
+def get_player_stats(matchID):
+    html = get_html("https://www.hltv.org/matches/%s" % (matchID))
     if html is None:
-        print("Failed for %s" % (matchID))
+        print(f"Failed for {eventID}")
         return []
 
     # Get maps

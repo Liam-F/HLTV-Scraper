@@ -3,7 +3,7 @@ import urllib.request
 import re
 
 
-def getHTML(url):
+def get_html(url):
     # Open the URL
     # Spoof the user agent
     request = Request(url)
@@ -17,5 +17,5 @@ def getHTML(url):
         else:
             return html
     except urllib.error.HTTPError as err:
-        print("%s for %s" % (err.code, url))
+        print(f"{err.code} for {url}")
         return None
