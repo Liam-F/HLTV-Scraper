@@ -25,7 +25,7 @@ def scrape(array, function, threads):
         if completed > 0:
             sys.stdout.write('\r'+f"{completed/len(array)*100:.0f}% done. Waiting for {len(array)-completed} tasks to complete.")
         sys.stdout.flush()
-        # time.sleep(2)
+
     pool.join()
     return list(result)
 
