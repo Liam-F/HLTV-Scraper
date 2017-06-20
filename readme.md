@@ -26,7 +26,7 @@ Once the new events have been accounted for, the script takes `matchesToCheck` a
 
 ### Handling Multiple Maps
 
-Since this returns multidimensional arrays for matches with more than one map, the script calls `fixArray()` thrice to remove any extra dimensions. The method turns an array like this:
+Since this returns multidimensional arrays for matches with more than one map, the script calls `fix_array()` thrice to remove any extra dimensions. The method turns an array like this:
 
 	[[1, 2, 3], [3, 4, 5], [['a', 'b', 'c'], ['c', 'd', 'e']], [5, 6, 7]]
  
@@ -46,4 +46,4 @@ Each match has player stats for each map. The script looks for these statistics 
 
 ## Updating Players and Teams
 
-Each player and team on HLTV has a unique identification number that increases as new players are added to the database. To find new players and teams, we get the maximum identifier value form the respective `.csv` file and iterate over it using `getIterableItems`. From there the relevant pages are scraped and tabulated to `players.csv` and `teams.csv`.
+Each player and team on HLTV has a unique identification number that increases as new players are added to the database. To find new players and teams, we get the maximum identifier value form the respective `.csv` file and iterate over it using `get_iterable_items()`. From there the relevant pages are scraped and tabulated to `players.csv` and `teams.csv`.
