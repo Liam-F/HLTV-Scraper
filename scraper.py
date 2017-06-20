@@ -1,7 +1,7 @@
 from html import get_html
-import re
 from datetime import datetime
 from string import digits
+import re
 
 
 def get_event_names(eventID):
@@ -10,27 +10,26 @@ def get_event_names(eventID):
         print(f"Failed for {eventID}")
         return []
     # Find the type of event (online, LAN, etc)
-    eventType = re.findall(' <div class=\".*text-ellipsis\">', html)
-    if len(eventType) < 1:
-        return []
-    eventNames = re.findall('text-ellipsis\">.*<', html)
-    eventEndDate = re.findall('class="standard-headline">.*<', html)
+    eventType = re.findall('title=\".*\">.*</span></td>', html)
+    eventNames = re.findall('<div class=\"eventname\">.*</div>', html)
+    eventEndDate = re.findall('data-unix=\".*\">', html)
 
     # print eventType
     if len(eventType) > 0:
-        eventType[0] = (eventType[0].replace(" <div class=\"", "")).replace(" text-ellipsis\">", "")
+        eventType[0] = (eventType[0].split('>')[1]).replace("</span", "")
     else:
         eventType.append(0)
 
     # print eventNames
     if len(eventNames) > 0:
-        eventNames[0] = (eventNames[0].replace("text-ellipsis\">", "")).replace("<", "")
+        eventNames[0] = (eventNames[0].replace("<div class=\"eventname\">", "")).replace("</div>", "")
     else:
         eventNames.append(0)
 
     # print eventEndDate
     if len(eventEndDate) > 0:
-        eventEndDate[0] = (eventEndDate[0].replace("class=\"standard-headline\">", "")).replace("<", "")
+        eventEndDate[0] = (eventEndDate[0].split('\"')[1]).replace("\"", "")[:-3]
+        eventEndDate[0] = datetime.utcfromtimestamp(int(eventEndDate[0])).strftime('%Y-%m-%d')
     else:
         eventEndDate.append(0)
     # Make an array for pool.map to process
@@ -43,14 +42,14 @@ def get_event_names(eventID):
 
 
 def get_match_events(matchID):
-    html = get_html("https://www.hltv.org/matches/%s" % (matchID))
+    html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
         print(f"Failed for {matchID}")
         return []
     # Find the type of event (online, LAN, etc)
     eventName = re.findall('\"/events/.*/', html)
     if len(eventName) < 1:
-        print("Failed %s" % (matchID))
+        print(f"Failed for {matchID}")
         return []
 
     # print eventType
@@ -67,7 +66,7 @@ def get_match_events(matchID):
 
 
 def get_teams(teamID):
-    html = get_html("https://www.hltv.org/team/%s/a" % (teamID))
+    html = get_html(f"https://www.hltv.org/team/{teamID}/a")
     if html is None:
         print(f"Failed for {teamID}")
         return []
@@ -103,7 +102,7 @@ def get_teams(teamID):
 
 
 def get_match_info(matchID):
-    html = get_html("https://www.hltv.org/matches/%s" % (matchID))
+    html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
         print(f"Failed for {eventID}")
         return []
@@ -180,7 +179,7 @@ def get_match_info(matchID):
             # Do nothing, because OT scores are already calculated
             pass
         else:
-            print("HLTV altered score layout for %s" % (matchID))
+            print(f"HLTV altered score layout for {matchID}")
             return []
 
     # Make an array for pool.map to process
@@ -226,7 +225,7 @@ def get_match_info(matchID):
 
 def get_match_lineups(matchID):
     # Set some vars for later
-    html = get_html("https://www.hltv.org/matches/%s" % (matchID))
+    html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
         print(f"Failed for {eventID}")
         return []
@@ -234,7 +233,7 @@ def get_match_lineups(matchID):
 
     # Give up if no team names found
     if len(playerIDs) < 1:
-        print("%s failed, no players detected" % (matchID))
+        print(f"{matchID} failed, no players detected")
         return []
     for i in range(0, len(playerIDs)):
         playerIDs[i] = (playerIDs[i].split("/"))[2].split("/")[0]
@@ -257,12 +256,12 @@ def get_match_lineups(matchID):
         players.append(matchID)
         return players
     else:
-        print("HLTV altered lineup layout for %s" % (matchID))
+        print(f"HLTV altered lineup layout for {matchID}")
         return []
 
 
 def get_players(playerID):
-    html = get_html("https://www.hltv.org/player/%s/a" % (playerID))
+    html = get_html(f"https://www.hltv.org/player/{playerID}/a")
     if html is None:
         print(f"Failed for {playerID}")
         return []
@@ -296,7 +295,7 @@ def get_players(playerID):
 
 
 def get_player_stats(matchID):
-    html = get_html("https://www.hltv.org/matches/%s" % (matchID))
+    html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
         print(f"Failed for {eventID}")
         return []
@@ -305,10 +304,11 @@ def get_player_stats(matchID):
     maps = re.findall('<div class=\"stats-content\" id=\".*-content\">', html)
     if len(maps) > 0:
         for i in range(0, len(maps)):
+            # Really messy way to clean the result
             maps[i] = (maps[i].replace("<div class=\"stats-content\" id=\"", "")).replace("-content\">", "").translate({ord(k): None for k in digits})
         maps.remove(maps[0])
     else:
-        print("No player stats for %s" % (matchID))
+        print(f"No player stats for {matchID}")
         return []
 
     # Get Player IDs
@@ -317,7 +317,7 @@ def get_player_stats(matchID):
         for i in range(0, len(players)):
             players[i] = (players[i].replace("href=\"/player/", "")).replace("/", "")
     else:
-        print("No player IDs for %s" % (matchID))
+        print(f"No player IDs for {matchID}")
         return []
 
     # Find player KDs
@@ -331,7 +331,7 @@ def get_player_stats(matchID):
             kills.append(kd[i][0:kd[i].find('-')])
             deaths.append(kd[i][kd[i].find('-')+1:len(kd[i])])
     else:
-        print("No player K/D for %s" % (matchID))
+        print(f"No player K/D for {matchID}")
         return []
     # Remove unnecessary instances of D
     deaths[:] = [x for x in deaths if x != 'D']
@@ -344,7 +344,7 @@ def get_player_stats(matchID):
         for i in range(0, len(adr)):
             adr[i] = (adr[i].replace("<td class=\"adr text-center \">", "")).replace("</td>", "")
     else:
-        print("No player ADR for %s" % (matchID))
+        print(f"No player ADR for {matchID}")
         # Add blank items for when data is missing; number may need adjustment if we do BO7s later
         adr = [""] * 70
 
@@ -354,7 +354,7 @@ def get_player_stats(matchID):
         for i in range(0, len(kast)):
             kast[i] = (kast[i].replace("<td class=\"kast text-center\">", "")).replace("%</td>", "")
     else:
-        print("No player KAST ratio for %s" % (matchID))
+        print(f"No player KAST ratio for {matchID}")
         # Add blank items for when data is missing; number may need adjustment if we do BO7s later
         kast = [""] * 70
 
@@ -375,7 +375,7 @@ def get_player_stats(matchID):
         for i in range(0, len(nonNumbers)):
             rating[:] = [value for value in rating if value != nonNumbers[i]]
     else:
-        print("No player Rating for %s" % (matchID))
+        print(f"No player Rating for {matchID}")
         return []
 
     # Remove unnecessary instances of 'Rating'
@@ -410,5 +410,5 @@ def get_player_stats(matchID):
                 playerArray.append(matchID)
                 masterArray.append(playerArray)
         except IndexError:
-                print("Player stats error with %s" % (matchID))
+                print(f"Player stats error with {matchID}")
     return masterArray

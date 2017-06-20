@@ -17,8 +17,7 @@ if len(newMatchIDs) < 1:
     print("No new matches found!")
 else:
     # Tell the user how many matches we will tabulate
-    print("%s new matches to tabulate" % (len(newMatchIDs)))
-
+    print(f"{len(newMatchIDs)} new matches to tabulate")
     # Step 1: add to matches.csv
     if tab:
         tabulate("matchIDs", newMatchIDs)
@@ -69,4 +68,11 @@ else:
     newPlayers = scrape(newPlayers, get_players, threads)
     if tab:
         tabulate("players", newPlayers)
-    print("Completed tabulation for %s new matches, %s new player stats, %s new events, %s new teams, and %s new players." % (len(matchesToCheck), len(newPlayerStats), len(newEventIDs), len(newTeams), len(newPlayers)))
+
+    # Step 9: Summarize
+    print(f"Completed tabulation for", end=' ')
+    print(f"{len(matchesToCheck)} new matches,", end=' ')
+    print(f"{len(newPlayerStats)} new player stats,", end=' ')
+    print(f"{len(newEventIDs)} new events,", end=' ')
+    print(f"{len(newTeams)} new teams,", end=' ')
+    print(f"and {len(newPlayers)} new players.")

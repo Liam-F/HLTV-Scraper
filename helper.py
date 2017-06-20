@@ -7,16 +7,27 @@ import sys
 def scrape(array, function, threads):
     # Define the number of threads
     pool = ThreadPool(threads)
-
     # Tell the user what is happening
-    length = len(array)
-    print(f"Scraping {length} items using {function} on {threads} threads.")
-
+    print(f"Scraping {len(array)} items using {function} on {threads} threads.")
     # Calls get() and adds the filesize returned each call to an array called filesizes
-    result = pool.map(function, array)
+    result = (pool.imap_unordered(function, array))
     pool.close()
+
+    # Display progress as the scraper runs its processes
+    while (True):
+        completed = result._index
+        # Break out of the loop if all tasks are done
+        if (completed == len(array)):
+            sys.stdout.write('\r'+f"100% complete. ")
+            sys.stdout.flush()
+            break
+        # Avoid a ZeroDivisionError
+        if completed > 0:
+            sys.stdout.write('\r'+f"{completed/len(array)*100:.0f}% done. Waiting for {len(array)-completed} tasks to complete.")
+        sys.stdout.flush()
+        # time.sleep(2)
     pool.join()
-    return result
+    return list(result)
 
 
 # Handle an error where data is not added to the end of the CSV file.
@@ -24,22 +35,22 @@ def add_new_line(file):
     # Add a newline to the end of the file if there is not one
     with open(file, "r+") as f:
         f.seek(0, 2)
-        if(f.read() != '\n'):
+        if (f.read() != '\n'):
             f.seek(0, 2)
             f.write('\n')
+    return None
 
 
 def tabulate(csvFile, array):
     # Files must be in the csv directory inside the project folder
     # Opens the CSV file
-    with open("csv/%s.csv" % (csvFile), 'a', newline='', encoding='utf-8') as f:
+    with open(f"csv/{csvFile}.csv", 'a', newline='', encoding='utf-8') as f:
         writer = csv.writer(f, delimiter=',')
         # Add the array passed in to the CSV file
         for i in range(0, len(array)):
             if len(array[i]) > 0:
                 writer.writerow(array[i])
-    length = len(array)
-    print(f"Succesfully tabulated {length} rows to {csvFile}.csv.")
+    print(f"Succesfully tabulated {len(array)} rows to {csvFile}.csv.")
     return True
 
 
@@ -47,7 +58,7 @@ def get_existing_data(csvFile, colNum):
     # Add the values in colNum in csvFile to an array
     array = []
     print(f"Reading data from {csvFile}.csv.")
-    with open("csv/%s.csv" % (csvFile), encoding='utf-8') as csvfile:
+    with open(f"csv/{csvFile}.csv", encoding='utf-8') as csvfile:
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
             array.append(row[colNum])
@@ -58,7 +69,7 @@ def find_max(csvFile, colNum):
     # Find the maximum value in a column in an array
     array = []
     print(f"Reading data from {csvFile}.csv.")
-    with open("csv/%s.csv" % (csvFile), encoding='utf-8') as csvfile:
+    with open(f"csv/{csvFile}.csv", encoding='utf-8') as csvfile:
         next(csvfile)
         readCSV = csv.reader(csvfile, delimiter=',')
         for row in readCSV:
@@ -73,8 +84,7 @@ def remove_existing_data(existing, new):
             new.remove(i)
     # Convert new values to a set to remove duplicates, then back to a list
     new = list(set(new))
-    length = len(new)
-    print(f"{length} new items to add.")
+    print(f"{len(new)} new items to add.")
     return new
 
 
@@ -116,9 +126,8 @@ def get_new_iterable_items(page, startID):
         if html is None:
             check = False
         else:
-            sys.stdout.write('\r'+"New %s found: %s" % (page, startID))
+            sys.stdout.write('\r'+f"New {page} found: {startID}")
             sys.stdout.flush()
             array.append(startID)
-    length = len(array)
-    print(f"\nFound {length} new {page}s.")
+    print(f"\nFound {len(array)} new {page}s.")
     return array
