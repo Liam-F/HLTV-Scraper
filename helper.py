@@ -23,7 +23,7 @@ def scrape(array, function, threads):
             break
         # Avoid a ZeroDivisionError
         if completed > 0:
-            sys.stdout.write('\r'+f"{completed/len(array)*100:.0f}% done. Waiting for {len(array)-completed} tasks to complete.")
+            sys.stdout.write('\r'+f"{completed/len(array)*100:.0f}% done. Waiting for {len(array)-completed} tasks to complete. ")
         sys.stdout.flush()
 
     pool.join()
