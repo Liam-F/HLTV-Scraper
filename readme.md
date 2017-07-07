@@ -10,7 +10,13 @@ Since this is written in pure Python, there are no dependencies to install. Simp
 
 ### Arguments
 
-The script can take 2 arguments: `check` and `notab`. Using `start.py check` will only check how many new matches need to be downloaded and do nothing else. `start.py notab` will let the script run but will disable the tabulation.
+The script can take 2 arguments: `check` and `notab`. Using `start.py check` will only check how many new matches need to be downloaded and do nothing else. `start.py notab` will let the script run but will disable the tabulation. I recommend adding these aliases to your `.bash_profile`:
+
+    alias scheck='cd Code/Python/HLTV\ Scraper && python3 start.py check'
+    
+    alias snotab='cd Code/Python/HLTV\ Scraper && python3 start.py notab'
+    
+    alias scraper='cd Code/Python/HLTV\ Scraper && python3 start.py'
 
 ## Getting New Matches
 
