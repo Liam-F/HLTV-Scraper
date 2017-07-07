@@ -131,3 +131,10 @@ def get_new_iterable_items(page, startID):
             array.append(startID)
     print(f"\nFound {len(array)} new {page}s.")
     return array
+
+
+def check_args(arg, array):
+    # Determine if the argument was passed or not
+    if arg in array:
+        return False
+    return True

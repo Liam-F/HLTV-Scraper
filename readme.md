@@ -2,11 +2,15 @@
 
 This is a multi-threaded Python scraper designed to pull data from HLTV.org and tabulate it into a series of CSV files. It is written in pure Python, so it should run on any system that can run Python 3. It is not compatible with Python 2, so you may need to install the latest Python release from [here](https://www.python.org/downloads/).
 
-## Installation
+## Installation and Usage
 
 Since this is written in pure Python, there are no dependencies to install. Simply clone the repository or download the zip file, then `cd` to the directory and run `python3 start.py`. There is (an outdated) video demonstration [here](https://twitter.com/rxcs/status/870564131715162112).
 
 ![](https://i.imgur.com/g5Wk3eS.png)
+
+### Arguments
+
+The script can take 2 arguments: `check` and `notab`. Using `start.py check` will only check how many new matches need to be downloaded and do nothing else. `start.py notab` will let the script run but will disable the tabulation.
 
 ## Getting New Matches
 

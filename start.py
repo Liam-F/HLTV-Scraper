@@ -6,7 +6,7 @@ from helper import *
 # Define number of threads to use
 threads = 32
 # Set to True to activate tabulation and False to disable it.
-tab = True
+tab = check_args('notab', sys.argv)
 
 # Make an array of existing Match IDs
 existingMatchIDs = get_existing_data("matchIDs", 1)
@@ -15,6 +15,9 @@ existingMatchIDs = get_existing_data("matchIDs", 1)
 newMatchIDs = get_match_ids(existingMatchIDs[len(existingMatchIDs)-1])
 if len(newMatchIDs) < 1:
     print("No new matches found!")
+elif not check_args('check', sys.argv):
+    print(f"{len(newMatchIDs)} new matches to tabulate")
+    pass
 else:
     # Tell the user how many matches we will tabulate
     print(f"{len(newMatchIDs)} new matches to tabulate")
