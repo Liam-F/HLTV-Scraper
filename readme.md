@@ -6,7 +6,7 @@ This is a multi-threaded Python scraper designed to pull data from HLTV.org and 
 
 Since this is written in pure Python, there are no dependencies to install. Simply clone the repository or download the zip file, then `cd` to the directory and run `python3 start.py`. There is a video demonstration [here](https://twitter.com/rxcs/status/883818154362675200).
 
-![](https://i.imgur.com/g5Wk3eS.png)
+![](https://i.imgur.com/jFo3lvW.png)
 
 ### Arguments
 
