@@ -88,3 +88,12 @@ else:
     print(f"{len(newEventIDs)} new events,", end=' ')
     print(f"{len(newTeams)} new teams,", end=' ')
     print(f"and {len(newPlayers)} new players.")
+
+    # Step 10: Debug
+    if not check_args('debug', sys.argv):
+        print_array("New matches", matchesToCheck)
+        print_array("Match lineups", newMatchLineups)
+        print_array("Player stats", newPlayerStats)
+        print_array("Match results", newMatchInfo)
+        print_array("New teams", newTeams)
+        print_array("New players", newPlayers)
