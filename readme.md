@@ -10,10 +10,11 @@ Since this is written in pure Python, there are no dependencies to install. Simp
 
 ### Arguments
 
-The script can take several arguments: `check`, `notab`, or `test`. 
+The script can take several arguments: `check`, `notab`, `debug`, or `test`. 
 
 -  `start.py check` will only check how many new matches need to be downloaded and do nothing else. 
 -  `start.py notab` will let the script run but will disable the tabulation. 
+-  `start.py debug` can be combined with `notab` to output the raw data the scraper finds.
 -  `start.py test match_id` will print the results of a specific given match. For example, `start.py test 2312163/natus-vincere-vs-cloud9-esl-one-cologne-2017` will result in:
 
 		Event: ESL One Cologne 2017
