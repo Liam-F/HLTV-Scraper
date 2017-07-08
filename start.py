@@ -25,6 +25,8 @@ elif len(newMatchIDs) < 1:
 # Just check for new matches and break out of the loop
 elif not check_args('check', sys.argv):
     print(f"{len(newMatchIDs)} new matches to tabulate")
+    if not check_args('debug', sys.argv):
+        print_array("New matches", newMatchIDs)
     pass
 
 else:
