@@ -1,5 +1,6 @@
 from multiprocessing.dummy import Pool as ThreadPool
 from html import get_html
+from scraper import *
 import csv
 import sys
 
@@ -138,3 +139,67 @@ def check_args(arg, array):
     if arg in array:
         return False
     return True
+
+
+def print_array(string, array):
+    # Prints each array in a multi-dimensional array
+    for i in range(0, len(array)):
+        print(f"{string}: {array[i][0:len(array[i])-1]}")
+    print("")
+
+
+def csv_lookup(csvFile, item, lookupColumn, resultColumn):
+    array = []
+    print(f"Reading data from {csvFile}.csv.")
+    with open(f"csv/{csvFile}.csv", encoding='utf-8') as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            if item in row[lookupColumn]:
+                if item == row[lookupColumn]:
+                    return row[resultColumn]
+                pass
+            pass
+        pass
+
+
+def tests(threads):
+    # Use only one thread
+    threads = int(threads/threads)
+
+    # Add the single match ID to an array
+    matchID = []
+    matchID.append(sys.argv[sys.argv.index('test')+1])
+
+    # Tell the user what we are parsing
+    print(f"\nBeginning test scrape for {matchID[0]}:\n")
+
+    # Handle the Event ID
+    eventID = scrape(matchID, get_match_events, threads)
+    eventID[0][1] = csv_lookup('eventIDs', eventID[0][1], 3, 1)
+
+    # Handle new match info
+    matchInfo = fix_array(fix_array(fix_array(scrape(matchID, get_match_info, threads), 14), 14), 14)
+    for i in range(0, len(matchInfo)):
+        matchInfo[i][2] = csv_lookup('teams', matchInfo[i][2], 2, 0)
+        matchInfo[i][8] = csv_lookup('teams', matchInfo[i][8], 2, 0)
+
+    # Handle match lineup
+    lineup = scrape(matchID, get_match_lineups, threads)
+    for i in range(0, len(lineup[0])-1):
+        lineup[0][i] = csv_lookup('players', lineup[0][i], 2, 0)[1:]
+
+    # Handle player stats
+    stats = fix_player_stats(scrape(matchID, get_player_stats, threads))
+    for i in range(0, len(stats)):
+        stats[i][1] = csv_lookup('players', stats[i][1], 2, 0)[1:]
+
+    print(matchInfo)
+    print("")
+    print(stats)
+
+    # Handle printing
+    print(f"\nTest scrape results for {matchID[0]}:\n")
+    print(f"Event: {eventID[0][1]}\n")
+    print_array("Map results", matchInfo)
+    print_array("Match lineup", lineup)
+    print_array("Player stats", stats)

@@ -66,7 +66,7 @@ def get_match_events(matchID):
 
 
 def get_teams(teamID):
-    html = get_html(f"https://www.hltv.org/team/{teamID}/a")
+    html = get_html(f"https://www.hltv.org/team/{teamID}")
     if html is None:
         print(f"Failed for {teamID}")
         return []
@@ -104,7 +104,7 @@ def get_teams(teamID):
 def get_match_info(matchID):
     html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
-        print(f"Failed for {eventID}")
+        print(f"Failed for {matchID}")
         return []
     # Search variables data-unix="
     date = re.findall('data-unix=\".*\"', html)
@@ -227,7 +227,7 @@ def get_match_lineups(matchID):
     # Set some vars for later
     html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
-        print(f"Failed for {eventID}")
+        print(f"Failed for {matchID}")
         return []
     playerIDs = re.findall('<a href=\"/player/.*/', html)
 
@@ -261,7 +261,7 @@ def get_match_lineups(matchID):
 
 
 def get_players(playerID):
-    html = get_html(f"https://www.hltv.org/player/{playerID}/a")
+    html = get_html(f"https://www.hltv.org/player/{playerID}")
     if html is None:
         print(f"Failed for {playerID}")
         return []
@@ -297,7 +297,7 @@ def get_players(playerID):
 def get_player_stats(matchID):
     html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
-        print(f"Failed for {eventID}")
+        print(f"Failed for {matchID}")
         return []
 
     # Get maps

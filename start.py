@@ -13,11 +13,20 @@ existingMatchIDs = get_existing_data("matchIDs", 1)
 
 # Get the last ID so we know when to stop looking
 newMatchIDs = get_match_ids(existingMatchIDs[len(existingMatchIDs)-1])
-if len(newMatchIDs) < 1:
+
+# Run all tests for a specific Match ID
+if not check_args('test', sys.argv):
+    tests(threads)
+    pass
+
+elif len(newMatchIDs) < 1:
     print("No new matches found!")
+
+# Just check for new matches and break out of the loop
 elif not check_args('check', sys.argv):
     print(f"{len(newMatchIDs)} new matches to tabulate")
     pass
+
 else:
     # Tell the user how many matches we will tabulate
     print(f"{len(newMatchIDs)} new matches to tabulate")
