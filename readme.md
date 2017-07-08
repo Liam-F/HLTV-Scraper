@@ -54,7 +54,7 @@ I recommend adding these aliases to your `.bash_profile`:
     
     alias scraper='cd Code/Python/HLTV\ Scraper && python3 start.py'
 
-Thus, `scheck` will check for the number of new matches to scrape, `snotab` will run without tabulation, `stest match_id` will run the test for `match_id` and `scraper` will run the scraper normally.
+Thus, `scheck` will check for the number of new matches to scrape, `snotab` will run without tabulation, `stest match_id` will run the test for `match_id`, and `scraper` will run the scraper normally.
 
 ## Getting New Matches
 
