@@ -10,13 +10,51 @@ Since this is written in pure Python, there are no dependencies to install. Simp
 
 ### Arguments
 
-The script can take 2 arguments: `check` and `notab`. Using `start.py check` will only check how many new matches need to be downloaded and do nothing else. `start.py notab` will let the script run but will disable the tabulation. I recommend adding these aliases to your `.bash_profile`:
+The script can take several arguments: `check`, `notab`, or `tests`. 
+
+-  `start.py check` will only check how many new matches need to be downloaded and do nothing else. 
+-  `start.py notab` will let the script run but will disable the tabulation. 
+-  `start.py test match_id` will print the results of a specific given match. For example, `start.py test 2312163/natus-vincere-vs-cloud9-esl-one-cologne-2017` will result in:
+
+		Event: ESL One Cologne 2017
+		
+		Map results: ['2017-07-08', 'Mirage', 'Natus Vincere', 'CT', '13', '5', '8', 0, 'Cloud9', 'T', '16', '10', '6', 0]
+		Map results: ['2017-07-08', 'Overpass', 'Natus Vincere', 'CT', '14', '6', '8', 0, 'Cloud9', 'T', '16', '9', '7', 0]
+		
+		Match lineup: ['GuardiaN', 'flamie', 'Edward', 'seized', 's1mple', 'Stewie2K', 'shroud', 'autimatic', 'Skadoodle', 'n0thing']
+		
+		Player stats: ['Mirage', 'GuardiaN', '25', '14', '87.1', '72.4', '1.38']
+		Player stats: ['Mirage', 'seized', '18', '22', '81.3', '75.9', '1.05']
+		Player stats: ['Mirage', 'Edward', '20', '19', '64.9', '62.1', '1.00']
+		Player stats: ['Mirage', 'flamie', '15', '17', '65.7', '69.0', '0.92']
+		Player stats: ['Mirage', 's1mple', '15', '22', '63.7', '48.3', '0.73']
+		Player stats: ['Mirage', 'Stewie2K', '27', '21', '93.8', '72.4', '1.38']
+		Player stats: ['Mirage', 'autimatic', '23', '19', '89.4', '75.9', '1.15']
+		Player stats: ['Mirage', 'shroud', '14', '17', '59.8', '72.4', '0.93']
+		Player stats: ['Mirage', 'n0thing', '18', '20', '68.5', '58.6', '0.88']
+		Player stats: ['Mirage', 'Skadoodle', '12', '17', '48.7', '72.4', '0.80']
+		Player stats: ['Overpass', 'flamie', '24', '22', '88.4', '73.3', '1.17']
+		Player stats: ['Overpass', 's1mple', '23', '20', '88.0', '80.0', '1.13']
+		Player stats: ['Overpass', 'Edward', '20', '22', '73.9', '70.0', '1.07']
+		Player stats: ['Overpass', 'GuardiaN', '17', '20', '63.5', '60.0', '1.01']
+		Player stats: ['Overpass', 'seized', '17', '22', '59.0', '73.3', '0.82']
+		Player stats: ['Overpass', 'shroud', '26', '15', '76.1', '73.3', '1.40']
+		Player stats: ['Overpass', 'Skadoodle', '26', '19', '81.5', '86.7', '1.24']
+		Player stats: ['Overpass', 'Stewie2K', '18', '25', '90.7', '70.0', '1.10']
+		Player stats: ['Overpass', 'autimatic', '22', '23', '75.2', '80.0', '1.09']
+		Player stats: ['Overpass', 'n0thing', '14', '19', '62.4', '73.3', '0.91'] 
+
+I recommend adding these aliases to your `.bash_profile`:
 
     alias scheck='cd Code/Python/HLTV\ Scraper && python3 start.py check'
     
     alias snotab='cd Code/Python/HLTV\ Scraper && python3 start.py notab'
     
+    alias stest='cd Code/Python/HLTV\ Scraper && python3 start.py test'
+    
     alias scraper='cd Code/Python/HLTV\ Scraper && python3 start.py'
+
+Thus, `scheck` will check for the number of new matches to scrape, `snotab` will run without tabulation, `stest match_id` will run the test for `match_id` and `scraper` will run the scraper normally.
 
 ## Getting New Matches
 
