@@ -193,10 +193,6 @@ def tests(threads):
     for i in range(0, len(stats)):
         stats[i][1] = csv_lookup('players', stats[i][1], 2, 0)[1:]
 
-    print(matchInfo)
-    print("")
-    print(stats)
-
     # Handle printing
     print(f"\nTest scrape results for {matchID[0]}:\n")
     print(f"Event: {eventID[0][1]}\n")
