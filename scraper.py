@@ -66,7 +66,7 @@ def get_match_events(matchID):
 
 
 def get_teams(teamID):
-    html = get_html(f"https://www.hltv.org/team/{teamID}")
+    html = get_html(f"https://www.hltv.org/team/{teamID}/a")
     if html is None:
         print(f"Failed for {teamID}")
         return []
@@ -261,7 +261,7 @@ def get_match_lineups(matchID):
 
 
 def get_players(playerID):
-    html = get_html(f"https://www.hltv.org/player/{playerID}")
+    html = get_html(f"https://www.hltv.org/player/{playerID}/a")
     if html is None:
         print(f"Failed for {playerID}")
         return []
