@@ -10,7 +10,7 @@ Since this is written in pure Python, there are no dependencies to install. Simp
 
 ### Arguments
 
-The script can take several arguments: `check`, `notab`, or `tests`. 
+The script can take several arguments: `check`, `notab`, or `test`. 
 
 -  `start.py check` will only check how many new matches need to be downloaded and do nothing else. 
 -  `start.py notab` will let the script run but will disable the tabulation. 
