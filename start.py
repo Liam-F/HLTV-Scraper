@@ -31,9 +31,6 @@ elif check_args('check', sys.argv):
     pass
 
 else:
-    # Tell the user how many matches we will tabulate
-    print(f"{len(newMatchIDs)} new matches to tabulate")
-
     # Step 1: add new matches to the event join table
     events = get_existing_data("joinMatchEvent", 0)
     matchesToCheck = remove_existing_data(events, un_dimension(newMatchIDs, 1), 'matches')
@@ -70,9 +67,9 @@ else:
     if tab:
         tabulate("matchIDs", newMatchIDs)
         tabulate("joinMatchEvent", newEvents)
-        tabulate("eventIDs", newEventIDs)
         tabulate("matchLineups", newMatchLineups)
         tabulate("playerStats", newPlayerStats)
+        tabulate("eventIDs", newEventIDs)
         tabulate("teams", newTeams)
         tabulate("players", newPlayers)
         tabulate("matchResults", newMatchInfo)
