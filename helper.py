@@ -19,7 +19,7 @@ def scrape(array, function, threads):
         completed = result._index
         # Break out of the loop if all tasks are done
         if (completed == len(array)):
-            sys.stdout.write('\r'+f"100% complete. ")
+            sys.stdout.write('\r'+"")
             sys.stdout.flush()
             break
         # Avoid a ZeroDivisionError
@@ -43,15 +43,16 @@ def add_new_line(file):
 
 
 def tabulate(csvFile, array):
-    # Files must be in the csv directory inside the project folder
-    # Opens the CSV file
-    with open(f"csv/{csvFile}.csv", 'a', newline='', encoding='utf-8') as f:
-        writer = csv.writer(f, delimiter=',')
-        # Add the array passed in to the CSV file
-        for i in range(0, len(array)):
-            if len(array[i]) > 0:
-                writer.writerow(array[i])
-    print(f"Succesfully tabulated {len(array)} rows to {csvFile}.csv.")
+    if len(array) > 1:
+        # Files must be in the csv directory inside the project folder
+        # Opens the CSV file
+        with open(f"csv/{csvFile}.csv", 'a', newline='', encoding='utf-8') as f:
+            writer = csv.writer(f, delimiter=',')
+            # Add the array passed to the CSV file
+            for i in range(0, len(array)):
+                if len(array[i]) > 0:
+                    writer.writerow(array[i])
+        print(f"Succesfully tabulated {len(array)} rows to {csvFile}.csv.")
     return True
 
 
