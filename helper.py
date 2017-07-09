@@ -15,16 +15,19 @@ def scrape(array, function, threads):
     pool.close()
 
     # Display progress as the scraper runs its processes
-    while (True):
+    while (len(array) > 1):
         completed = result._index
-        # Break out of the loop if all tasks are done
+        # Break out of the loop if all tasks are done or if there is only one task
         if (completed == len(array)):
+            sys.stdout.flush()
             sys.stdout.write('\r'+"")
             sys.stdout.flush()
             break
         # Avoid a ZeroDivisionError
         if completed > 0:
-            sys.stdout.write('\r'+f"{completed/len(array)*100:.0f}% done. Waiting for {len(array)-completed} tasks to complete. ")
+            sys.stdout.flush()
+            sys.stdout.write('\r'+f"{completed/len(array)*100:.0f}% done. {len(array)-completed} left. ")
+            sys.stdout.flush()
         sys.stdout.flush()
 
     pool.join()
@@ -79,14 +82,14 @@ def find_max(csvFile, colNum):
     return max(array)
 
 
-def remove_existing_data(existing, new):
+def remove_existing_data(existing, new, item):
     # Remove data we already have from the list of new data to parse
     for i in new[:]:
         if i in existing:
             new.remove(i)
     # Convert new values to a set to remove duplicates, then back to a list
     new = list(set(new))
-    print(f"{len(new)} new items to add.")
+    print(f"{len(new)} new {item} to check.")
     return new
 
 
@@ -109,7 +112,7 @@ def fix_array(array, value):
 
 
 def fix_player_stats(array):
-    # Used to clean match info results for matches with more than one map
+    # Used to clean palyer stats for matches with more than one map
     newArray = []
     for i in range(0, len(array)):
         for b in range(0, len(array[i])):
@@ -118,7 +121,7 @@ def fix_player_stats(array):
 
 
 def get_new_iterable_items(page, startID):
-    # Iterate through unique IDs until we get the last one, then return them to a list
+    # Increments unique IDs until we get the last one, then return them to a list
     print(f"Checking for new {page}s. This may take awhile.")
     check = True
     array = []
@@ -138,8 +141,8 @@ def get_new_iterable_items(page, startID):
 def check_args(arg, array):
     # Determine if the argument was passed or not
     if arg in array:
-        return False
-    return True
+        return True
+    return False
 
 
 def print_array(string, array):
@@ -169,7 +172,11 @@ def tests(threads):
 
     # Add the single match ID to an array
     matchID = []
-    matchID.append(sys.argv[sys.argv.index('test')+1])
+    try:
+        matchID.append(sys.argv[sys.argv.index('test')+1])
+    except IndexError as e:
+        print(f"You must add an argument for the matchID after the 'test' argument!")
+        return None
 
     # Tell the user what we are parsing
     print(f"\nBeginning test scrape for {matchID[0]}:\n")
