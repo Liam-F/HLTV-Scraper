@@ -1,8 +1,6 @@
 from urllib.request import Request, urlopen
 import urllib.request
 import re
-
-global htmlCache
 htmlCache = [[], []]
 
 
