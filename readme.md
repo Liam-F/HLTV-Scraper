@@ -4,18 +4,18 @@ This is a multi-threaded Python scraper designed to pull data from HLTV.org and 
 
 ## Installation and Usage
 
-Since this is written in pure Python, there are no dependencies to install. Simply clone the repository or download the zip file, then `cd` to the directory and run `python3 start.py`. There is a video demonstration [here](https://twitter.com/rxcs/status/883818154362675200).
+Since this is written in pure Python, there are no dependencies to install. Simply clone the repository or download the zip file, then `cd` to the directory and run `python3 start.py`. There is a video demonstration [here](https://twitter.com/rxcs/status/883818154362675200) using the aliases described below.
 
 ![](https://i.imgur.com/jFo3lvW.png)
 
 ### Arguments
 
-The script can take several arguments: `check`, `notab`, `debug`, or `test`. 
+The script can take several arguments: `check`, `notab`, `debug`, or `test`.
 
 -  `start.py check` will only check how many new matches need to be downloaded and do nothing else. 
 -  `start.py notab` will let the script run but will disable the tabulation. 
 -  `start.py debug` can be combined with `notab` to output the raw data the scraper finds.
--  `start.py test match_id` will print the results of a specific given match. For example, `start.py test 2312163/natus-vincere-vs-cloud9-esl-one-cologne-2017` will result in:
+-  `start.py test <match_id>` will print the results of a specific given match. For example, `start.py test 2312163/natus-vincere-vs-cloud9-esl-one-cologne-2017` will result in:
 
 		Event: ESL One Cologne 2017
 		
@@ -55,11 +55,11 @@ I recommend adding these aliases to your `.bash_profile`:
     
     alias scraper='cd Code/Python/HLTV\ Scraper && python3 start.py'
 
-Thus, `scheck` will check for the number of new matches to scrape, `snotab` will run without tabulation, `stest match_id` will run the test for `match_id`, and `scraper` will run the scraper normally.
+Thus, `scheck` will check for the number of new matches to scrape, `snotab` will run without tabulation, `stest <match_id>` will run the test for `match_id`, and `scraper` will run the scraper normally. You can also run arguments using `scraper <args>`.
 
 ## Getting New Matches
 
-This works by scraping several pieces of data from the HLTV webpages. First, it will paginate through the match [results](https://www.hltv.org/results) page and determine which Match IDs are not yet in the database. If there are new IDs to tabulate, it will append them to the `matchIDs.csv` file. These new matches are stored in an array called `matchesToCheck`.
+This works by scraping several pieces of data from the HLTV webpages. First, it will paginate through the match [results](https://www.hltv.org/results) page and determine which Match IDs are not yet in the database. If there are new IDs to tabulate, it will append them to the `matchIDs.csv` file. These new matches are stored in an array called `matchesToCheck`. URL requests are cached so that they are not made more than once to reduce bandwidth.
 
 ### Matching Matches to Events
 
