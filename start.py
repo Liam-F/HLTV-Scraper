@@ -6,7 +6,7 @@ from helper import *
 # Define number of threads to use
 threads = 32
 # Set to True to activate tabulation and False to disable it.
-tab = check_args('notab', sys.argv)
+tab = not check_args('notab', sys.argv)
 
 # Make an array of existing Match and Event IDs
 existingMatchIDs = get_existing_data("matchIDs", 1)
@@ -16,7 +16,7 @@ existingEventIDs = get_existing_data("eventIDs", 3)
 newMatchIDs = get_match_ids(existingMatchIDs[len(existingMatchIDs)-1])
 
 # Run all tests for a specific Match ID
-if not check_args('test', sys.argv):
+if check_args('test', sys.argv):
     tests(threads)
     pass
 
@@ -24,9 +24,9 @@ elif len(newMatchIDs) < 1:
     print("No new matches found!")
 
 # Just check for new matches and break out of the loop
-elif not check_args('check', sys.argv):
+elif check_args('check', sys.argv):
     print(f"{len(newMatchIDs)} new matches to tabulate")
-    if not check_args('debug', sys.argv):
+    if check_args('debug', sys.argv):
         print_array("New matches", newMatchIDs)
     pass
 
@@ -36,7 +36,7 @@ else:
 
     # Step 1: add new matches to the event join table
     events = get_existing_data("joinMatchEvent", 0)
-    matchesToCheck = remove_existing_data(events, un_dimension(newMatchIDs, 1))
+    matchesToCheck = remove_existing_data(events, un_dimension(newMatchIDs, 1), 'matches')
     newEvents = scrape(matchesToCheck, get_match_events, threads)
 
     # Step 2: Update matchResults.csv
@@ -53,7 +53,7 @@ else:
     newPlayerStats = fix_player_stats(newPlayerStats)
 
     # Step 5: Add new events to eventIDs.csv
-    eventsToCheck = remove_existing_data(existingEventIDs, un_dimension(newEvents, 1))
+    eventsToCheck = remove_existing_data(existingEventIDs, un_dimension(newEvents, 1), 'events')
     newEventIDs = scrape(eventsToCheck, get_event_names, threads)
     if len(newEventIDs) < 1:
         print("No new event IDs to add!")
@@ -77,16 +77,8 @@ else:
         tabulate("players", newPlayers)
         tabulate("matchResults", newMatchInfo)
 
-    # Step 9: Summarize
-    print(f"Completed tabulation for", end=' ')
-    print(f"{len(matchesToCheck)} new matches,", end=' ')
-    print(f"{len(newPlayerStats)} new player stats,", end=' ')
-    print(f"{len(newEventIDs)} new events,", end=' ')
-    print(f"{len(newTeams)} new teams,", end=' ')
-    print(f"and {len(newPlayers)} new players.\n")
-
-    # Step 10: Debug
-    if not check_args('debug', sys.argv):
+    # Step 9: Debug
+    if check_args('debug', sys.argv):
         print_array("New matches", matchesToCheck)
         print_array("Match lineups", newMatchLineups)
         print_array("Match results", newMatchInfo)
