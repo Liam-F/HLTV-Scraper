@@ -45,6 +45,8 @@ The script can take several arguments: `check`, `notab`, `debug`, or `test`.
 		Player stats: ['Overpass', 'autimatic', '22', '23', '75.2', '80.0', '1.09']
 		Player stats: ['Overpass', 'n0thing', '14', '19', '62.4', '73.3', '0.91'] 
 
+### Aliases
+
 I recommend adding these aliases to your `.bash_profile`:
 
     alias scheck='cd Code/Python/HLTV\ Scraper && python3 start.py check'
