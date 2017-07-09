@@ -10,8 +10,7 @@ def cache_html(url, html):
 
 
 def get_html(url):
-    # Open the URL
-    # Spoof the user agent
+    # Open the URL and spoof the user agent
     request = Request(url)
     request.add_header('User-Agent', 'Mozilla/5.0')
     # Read the response as HTML
