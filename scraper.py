@@ -184,6 +184,8 @@ def get_match_info(matchID):
 
     # Make an array for pool.map to process
     result = []
+    # Create counter variable to access the proper item in the sides array
+    sideCount = 0
     if len(map) > 1:
         for i in range(0, len(scores)):
             # Create a temp array so that each map's stats are each contained in their own array
@@ -191,19 +193,20 @@ def get_match_info(matchID):
             tempArray.append(date[0])
             tempArray.append(map[i])
             tempArray.append(teamIDs[0])
-            tempArray.append(sides[0])
+            tempArray.append(sides[sideCount])
             tempArray.append(scores[i][0])
             tempArray.append(scores[i][2])
             tempArray.append(scores[i][4])
             tempArray.append(scores[i][6])
             tempArray.append(teamIDs[1])
-            tempArray.append(sides[1])
+            tempArray.append(sides[sideCount+1])
             tempArray.append(scores[i][1])
             tempArray.append(scores[i][3])
             tempArray.append(scores[i][5])
             tempArray.append(scores[i][7])
             tempArray.append(matchID)
             result.append(tempArray)
+            sideCount += 2
     else:
         result.append(date[0])
         result.append(map[0])
