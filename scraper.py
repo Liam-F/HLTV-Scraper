@@ -142,23 +142,28 @@ def get_match_info(matchID):
 
     # Find the team starting and half sides
     sides = []
-    if len(scores) == 1:
-        if re.findall('\"t\"|\"ct\"', scores[0])[0] == '\"t\"':
-            sides.append("T")
-            sides.append("CT")
+    try:
+        if len(scores) == 1:
+            if len(scores[0]) > 0:
+                if re.findall('\"t\"|\"ct\"', scores[0])[0] == '\"t\"':
+                    sides.append("T")
+                    sides.append("CT")
+                else:
+                    sides.append("CT")
+                    sides.append("T")
+        elif len(scores) > 1:
+            for i in range(0, len(scores)):
+                if len(scores[i]) > 0:
+                    if re.findall('\"t\"|\"ct\"', scores[i])[0] == "\"t\"":
+                        sides.append("T")
+                        sides.append("CT")
+                    else:
+                        sides.append("CT")
+                        sides.append("T")
         else:
-            sides.append("CT")
-            sides.append("T")
-    elif len(scores) > 1:
-        for i in range(0, len(scores)):
-            if re.findall('\"t\"|\"ct\"', scores[i])[0] == "\"t\"":
-                sides.append("T")
-                sides.append("CT")
-            else:
-                sides.append("CT")
-                sides.append("T")
-    else:
-        return []
+            return []
+    except IndexError:
+        pass
 
     # Find the scores if there is only one map
     if len(map) == 1:
