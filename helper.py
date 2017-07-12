@@ -188,7 +188,6 @@ def tests(threads):
 
     # Handle new match info
     matchInfo = fix_match_results(scrape(matchID, get_match_info, threads), 15)
-    print(matchInfo)
     for i in range(0, len(matchInfo)):
         matchInfo[i][2] = csv_lookup('teams', matchInfo[i][2], 2, 0)
         matchInfo[i][8] = csv_lookup('teams', matchInfo[i][8], 2, 0)
