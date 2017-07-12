@@ -13,7 +13,7 @@ existingMatchIDs = get_existing_data("matchIDs", 1)
 existingEventIDs = get_existing_data("eventIDs", 3)
 
 # Get the last ID so we know when to stop looking
-newMatchIDs = get_match_ids(existingMatchIDs[len(existingMatchIDs)-1])
+newMatchIDs = get_match_ids(existingMatchIDs[-1])
 
 # Run all tests for a specific Match ID
 if check_args('test', sys.argv):
@@ -30,6 +30,9 @@ elif check_args('check', sys.argv):
         print_array("New matches", newMatchIDs)
     pass
 
+elif check_args('temp', sys.argv):
+    pass
+
 else:
     # Step 1: add new matches to the event join table
     events = get_existing_data("joinMatchEvent", 0)
@@ -39,7 +42,7 @@ else:
     # Step 2: Update matchResults.csv
     newMatchInfo = scrape(matchesToCheck, get_match_info, threads)
     # Sometimes this returns a multi-dimensional array, so we remove it
-    newMatchInfo = fix_array(fix_array(fix_array(newMatchInfo, 14), 14), 14)
+    newMatchInfo = fix_match_results(newMatchInfo, 15)
 
     # Step 3: Update matchLineups.csv
     newMatchLineups = scrape(matchesToCheck, get_match_lineups, threads)
@@ -68,11 +71,11 @@ else:
         tabulate("matchIDs", newMatchIDs)
         tabulate("joinMatchEvent", newEvents)
         tabulate("matchLineups", newMatchLineups)
+        tabulate("matchResults", newMatchInfo)
         tabulate("playerStats", newPlayerStats)
         tabulate("eventIDs", newEventIDs)
         tabulate("teams", newTeams)
         tabulate("players", newPlayers)
-        tabulate("matchResults", newMatchInfo)
 
     # Step 9: Debug
     if check_args('debug', sys.argv):
