@@ -52,9 +52,9 @@ def tabulate(csvFile, array):
         with open(f"csv/{csvFile}.csv", 'a', newline='', encoding='utf-8') as f:
             writer = csv.writer(f, delimiter=',')
             # Add the array passed to the CSV file
-            for i in range(0, len(array)):
-                if len(array[i]) > 0:
-                    writer.writerow(array[i])
+            for i in array:
+                if len(i) > 0:
+                    writer.writerow(i)
         print(f"Succesfully tabulated {len(array)} rows to {csvFile}.csv.")
     return True
 
@@ -101,18 +101,21 @@ def un_dimension(array, item):
     return result
 
 
-def fix_array(array, value):
-    # Used to clean match info results for matches with more than one map
-    for i in range(0, len(array)):
-        if len(array[i]) < value:
-            for b in range(0, len(array[i])):
-                array.append(array[i][b])
-            array.remove(array[i])
-    return array
+def fix_match_results(array, length):
+    temp = []
+    for i in array:
+        if len(i) == length:
+            temp.append(i)
+        elif type(i) != type(1):
+            for b in i:
+                if len(b) == length:
+                    temp.append(b)
+    return temp
+
 
 
 def fix_player_stats(array):
-    # Used to clean palyer stats for matches with more than one map
+    # Used to clean player stats for matches with more than one map
     newArray = []
     for i in range(0, len(array)):
         for b in range(0, len(array[i])):
@@ -140,9 +143,7 @@ def get_new_iterable_items(page, startID):
 
 def check_args(arg, array):
     # Determine if the argument was passed or not
-    if arg in array:
-        return True
-    return False
+    return arg in array
 
 
 def print_array(string, array):
@@ -186,7 +187,8 @@ def tests(threads):
     eventID[0][1] = csv_lookup('eventIDs', eventID[0][1], 3, 1)
 
     # Handle new match info
-    matchInfo = fix_array(fix_array(fix_array(scrape(matchID, get_match_info, threads), 14), 14), 14)
+    matchInfo = fix_match_results(scrape(matchID, get_match_info, threads), 15)
+    print(matchInfo)
     for i in range(0, len(matchInfo)):
         matchInfo[i][2] = csv_lookup('teams', matchInfo[i][2], 2, 0)
         matchInfo[i][8] = csv_lookup('teams', matchInfo[i][8], 2, 0)
