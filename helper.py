@@ -106,12 +106,11 @@ def fix_match_results(array, length):
     for i in array:
         if len(i) == length:
             temp.append(i)
-        elif type(i) != type(1):
+        elif not isinstance(type(i), list):
             for b in i:
                 if len(b) == length:
                     temp.append(b)
     return temp
-
 
 
 def fix_player_stats(array):
