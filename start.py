@@ -17,7 +17,7 @@ newMatchIDs = get_match_ids(existingMatchIDs[-1])
 
 # Run all tests for a specific Match ID
 if check_args('test', sys.argv):
-    tests(threads)
+    tests()
     pass
 
 elif len(newMatchIDs) < 1:
