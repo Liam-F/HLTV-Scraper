@@ -27,7 +27,7 @@ elif len(newMatchIDs) < 1:
 elif check_args('check', sys.argv):
     print(f"{len(newMatchIDs)} new matches to tabulate")
     if check_args('debug', sys.argv):
-        print_array("New matches", newMatchIDs)
+        print_array("New matches", newMatchIDs, 0)
     pass
 
 elif check_args('temp', sys.argv):
@@ -79,9 +79,9 @@ else:
 
     # Step 9: Debug
     if check_args('debug', sys.argv):
-        print_array("New matches", matchesToCheck)
-        print_array("Match lineups", newMatchLineups)
-        print_array("Match results", newMatchInfo)
-        print_array("Player stats", newPlayerStats)
-        print_array("New teams", newTeams)
-        print_array("New players", newPlayers)
+        print_array("New matches", matchesToCheck, 1)
+        print_array("Match lineups", newMatchLineups, 1)
+        print_array("Match results", newMatchInfo, 1)
+        print_array("Player stats", newPlayerStats, 1)
+        print_array("New teams", newTeams, 1)
+        print_array("New players", newPlayers, 1)
