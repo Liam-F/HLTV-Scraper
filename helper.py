@@ -145,10 +145,10 @@ def check_args(arg, array):
     return arg in array
 
 
-def print_array(string, array):
+def print_array(string, array, slice):
     # Prints each array in a multi-dimensional array
     for i in range(0, len(array)):
-        print(f"{string}: {array[i][0:len(array[i])-1]}")
+        print(f"{string}: {array[i][0:len(array[i])-slice]}")
     print("")
 
 
@@ -166,17 +166,13 @@ def csv_lookup(csvFile, item, lookupColumn, resultColumn):
         pass
 
 
-def tests(threads):
-    # Use only one thread
-    threads = int(threads/threads)
+def tests(array):
+    # Use as many threads as there are items
+    threads = len(array)
 
-    # Add the single match ID to an array
+    # Add the passed match ID(s) to an array
     matchID = []
-    try:
-        matchID.append(sys.argv[sys.argv.index('test')+1])
-    except IndexError as e:
-        print(f"You must add an argument for the matchID after the 'test' argument!")
-        return None
+
 
     # Tell the user what we are parsing
     print(f"\nBeginning test scrape for {matchID[0]}:\n")
