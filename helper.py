@@ -10,19 +10,22 @@ def scrape(array, function, threads):
     pool = ThreadPool(threads)
     # Tell the user what is happening
     print(f"Scraping {len(array)} items using {function} on {threads} threads.")
-    # Calls get() and adds the filesize returned each call to an array called filesizes
+    # Calls function() and adds the filesize returned each call to an array called filesizes
+
     result = (pool.imap_unordered(function, array))
     pool.close()
 
     # Display progress as the scraper runs its processes
     while (len(array) > 1):
         completed = result._index
+
         # Break out of the loop if all tasks are done or if there is only one task
         if (completed == len(array)):
             sys.stdout.flush()
             sys.stdout.write('\r'+"")
             sys.stdout.flush()
             break
+
         # Avoid a ZeroDivisionError
         if completed > 0:
             sys.stdout.flush()
@@ -36,6 +39,7 @@ def scrape(array, function, threads):
 
 # Handle an error where data is not added to the end of the CSV file.
 def add_new_line(file):
+
     # Add a newline to the end of the file if there is not one
     with open(file, "r+") as f:
         f.seek(0, 2)
@@ -51,6 +55,7 @@ def tabulate(csvFile, array):
         # Opens the CSV file
         with open(f"csv/{csvFile}.csv", 'a', newline='', encoding='utf-8') as f:
             writer = csv.writer(f, delimiter=',')
+
             # Add the array passed to the CSV file
             for i in array:
                 if len(i) > 0:
@@ -87,6 +92,7 @@ def remove_existing_data(existing, new, item):
     for i in new[:]:
         if i in existing:
             new.remove(i)
+
     # Convert new values to a set to remove duplicates, then back to a list
     new = list(set(new))
     print(f"{len(new)} new {item} to check.")
@@ -127,6 +133,8 @@ def get_new_iterable_items(page, startID):
     print(f"Checking for new {page}s. This may take awhile.")
     check = True
     array = []
+
+    # Iterate until the page throws a 404
     while check:
         startID += 1
         html = get_html(f"https://www.hltv.org/{page}/{startID}/a")
@@ -153,6 +161,7 @@ def print_array(string, array, slice):
 
 
 def csv_lookup(csvFile, item, lookupColumn, resultColumn):
+    # Return the data from resultColumn that lines up with where the item is in the lookupColumn
     array = []
     print(f"Reading data from {csvFile}.csv.")
     with open(f"csv/{csvFile}.csv", encoding='utf-8') as csvfile:

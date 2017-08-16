@@ -20,11 +20,16 @@ def get_html(url):
     try:
         urlopen(request).read()
         html = urlopen(request).read().decode('ascii', 'ignore')
+
+        # HLTV has a custom error page for HTTP errors
         if len(re.findall('error-desc', html)) > 0:
             return None
         else:
+            # Cache the HTML data and return the HTML
             cache_html(url, html)
             return html
+
+    # Handle any other HTTPErrors
     except urllib.error.HTTPError as err:
         print(f"{err.code} for {url}")
         return None

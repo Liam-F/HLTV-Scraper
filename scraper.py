@@ -9,29 +9,31 @@ def get_event_names(eventID):
     if html is None:
         print(f"Failed for {eventID}")
         return []
-    # Find the type of event (online, LAN, etc)
+
+    # Find the type of event (online, LAN, etc), as well as the name and date of event
     eventType = re.findall('title=\".*\">.*</span></td>', html)
     eventNames = re.findall('<div class=\"eventname\">.*</div>', html)
     eventEndDate = re.findall('data-unix=\".*\">', html)
 
-    # print eventType
+    # Parse the eventType
     if len(eventType) > 0:
         eventType[0] = (eventType[0].split('>')[1]).replace("</span", "")
     else:
         eventType.append(0)
 
-    # print eventNames
+    # Parse the eventNames
     if len(eventNames) > 0:
         eventNames[0] = (eventNames[0].replace("<div class=\"eventname\">", "")).replace("</div>", "")
     else:
         eventNames.append(0)
 
-    # print eventEndDate
+    # Parse the eventEndDate
     if len(eventEndDate) > 0:
         eventEndDate[0] = (eventEndDate[0].split('\"')[1]).replace("\"", "")[:-3]
         eventEndDate[0] = datetime.utcfromtimestamp(int(eventEndDate[0])).strftime('%Y-%m-%d')
     else:
         eventEndDate.append(0)
+
     # Make an array for pool.map to process
     result = []
     result.append(eventType[0])
@@ -46,6 +48,7 @@ def get_match_events(matchID):
     if html is None:
         print(f"Failed for {matchID}")
         return []
+
     # Find the type of event (online, LAN, etc)
     eventName = re.findall('\"/events/.*/', html)
     if len(eventName) < 1:
@@ -70,6 +73,7 @@ def get_teams(teamID):
     if html is None:
         print(f"Failed for {teamID}")
         return []
+
     # Find the type of event (online, LAN, etc)
     teamName = re.findall('<div><span class=\"subjectname\">.*</span><br><i', html)
     if len(teamName) < 1:
@@ -80,13 +84,11 @@ def get_teams(teamID):
     if len(teamCountry) < 1:
         return []
 
-    # print teamName
     if len(teamName) > 0:
         teamName[0] = (teamName[0].replace("<div><span class=\"subjectname\">", "")).replace("</span><br><i", "")
     else:
         teamName.append(0)
 
-    # print teamCountry
     if len(teamCountry) > 0:
         teamCountry[0] = (teamCountry[0].replace("fa fa-map-marker\" aria-hidden=\"true\"></i> ", "")).split("<", 1)[0]
     else:
@@ -106,7 +108,8 @@ def get_match_info(matchID):
     if html is None:
         print(f"Failed for {matchID}")
         return []
-    # Search variables data-unix="
+
+    # Find match date, team IDs, team names, map, and scores
     date = re.findall('data-unix=\".*\"', html)
     teamIDs = re.findall('src=\"https://static.hltv.org/images/team/logo/.*\" class', html)
     teamNames = re.findall('class=\"logo\" title=\".*\">', html)
@@ -145,6 +148,7 @@ def get_match_info(matchID):
     try:
         if len(scores) == 1:
             if len(scores[0]) > 0:
+                # If team 1 is T, team 2 is CT
                 if re.findall('\"t\"|\"ct\"', scores[0])[0] == '\"t\"':
                     sides.append("T")
                     sides.append("CT")
@@ -152,6 +156,8 @@ def get_match_info(matchID):
                     sides.append("CT")
                     sides.append("T")
         elif len(scores) > 1:
+
+            # Same as above, but looped for multiple matches
             for i in range(0, len(scores)):
                 if len(scores[i]) > 0:
                     if re.findall('\"t\"|\"ct\"', scores[i])[0] == "\"t\"":
@@ -168,6 +174,7 @@ def get_match_info(matchID):
     # Find the scores if there is only one map
     if len(map) == 1:
         scores[0] = re.findall('\d+', scores[0])
+
     # Find the scores if there are multiple maps
     elif len(map) > 1:
         for i in range(0, len(scores)):
@@ -189,6 +196,7 @@ def get_match_info(matchID):
 
     # Make an array for pool.map to process
     result = []
+
     # Create counter variable to access the proper item in the sides array
     sideCount = 0
     if len(map) > 1:
@@ -232,11 +240,12 @@ def get_match_info(matchID):
 
 
 def get_match_lineups(matchID):
-    # Set some vars for later
     html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
         print(f"Failed for {matchID}")
         return []
+
+    # Get all of the players in a match
     playerIDs = re.findall('<a href=\"/player/.*/', html)
 
     # Give up if no team names found
@@ -245,8 +254,6 @@ def get_match_lineups(matchID):
         return []
     for i in range(0, len(playerIDs)):
         playerIDs[i] = (playerIDs[i].split("/"))[2].split("/")[0]
-    # print(playerIDs)c
-    # print(playerIDs[0:5] + playerIDs[10:15])
 
     # Make an array for pool.map to process
     if len(playerIDs) > 15:
@@ -273,7 +280,8 @@ def get_players(playerID):
     if html is None:
         print(f"Failed for {playerID}")
         return []
-    # Find the type of event (online, LAN, etc)
+
+    # Find a player's name and country
     playerName = re.findall('Complete statistics for.*</a>', html)
     if len(playerName) < 1:
         return []
@@ -281,13 +289,13 @@ def get_players(playerID):
     if len(playerCountry) < 1:
         return []
 
-    # print teamName
+    # Parse the playerName
     if len(playerName) > 0:
         playerName[0] = (playerName[0].replace("Complete statistics for ", "")).replace("</a>", "")
     else:
         playerName.append(0)
 
-    # print teamCountry
+    # Parse the playerCountry
     if len(playerCountry) > 0:
         playerCountry[0] = (playerCountry[0].replace("class=\"flag\" title=\"", "")).replace("\"> ", "")
     else:
@@ -372,13 +380,16 @@ def get_player_stats(matchID):
     if len(rating) > 0:
         for i in range(0, len(rating)):
             rating[i] = (rating[i].replace("<td class=\"rating text-center\">", "")).replace("</td>", "")
+
             # Check if the value returned is a float, if not append it to a list for removal
             try:
                 float(rating[i])
             except ValueError:
                 nonNumbers.append(rating[i])
+
         # Remove duplicate non-float values
         nonNumbers = list(set(nonNumbers))
+
         # Remove non-float values from the array of player ratings
         for i in range(0, len(nonNumbers)):
             rating[:] = [value for value in rating if value != nonNumbers[i]]
