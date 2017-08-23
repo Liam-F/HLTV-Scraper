@@ -22,14 +22,14 @@ def get_html(url):
         html = urlopen(request).read().decode('ascii', 'ignore')
 
         # HLTV has a custom error page for HTTP errors
-        if len(re.findall('error-desc', html)) > 0:
+        if len(re.findall('error-desc', html)) > 0 or len(re.findall('error-500', html)) > 0:
             return None
         else:
             # Cache the HTML data and return the HTML
             cache_html(url, html)
             return html
 
-    # Handle any other HTTPErrors
-    except urllib.error.HTTPError as err:
-        print(f"{err.code} for {url}")
+    # Handle any other errors
+    except:
+        print(f"Error for {url}")
         return None
