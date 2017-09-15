@@ -212,7 +212,7 @@ def get_match_info(matchID):
             tempArray.append(scores[i][4])
             tempArray.append(scores[i][6])
             tempArray.append(teamIDs[1])
-            tempArray.append(sides[sideCount+1])
+            tempArray.append(sides[sideCount + 1])
             tempArray.append(scores[i][1])
             tempArray.append(scores[i][3])
             tempArray.append(scores[i][5])
@@ -345,7 +345,7 @@ def get_player_stats(matchID):
             kd[i] = (kd[i].replace("<td class=\"kd text-center\">", "")).replace("</td>", "")
             # Clean up the hyphenated numbers
             kills.append(kd[i][0:kd[i].find('-')])
-            deaths.append(kd[i][kd[i].find('-')+1:len(kd[i])])
+            deaths.append(kd[i][kd[i].find('-') + 1:len(kd[i])])
     else:
         print(f"No player K/D for {matchID}")
         return []
@@ -404,28 +404,28 @@ def get_player_stats(matchID):
     masterArray = []
     for i in range(0, len(maps)):
         # Arrays have data for multiple matches, so this offsets us by the amount to get each map separately
-        offset = 10 * (i+1)
+        offset = 10 * (i + 1)
         try:
             for b in range(0, 5):
                 playerArray = []
                 playerArray.append(maps[i])
-                playerArray.append(players[b+offset])
-                playerArray.append(kills[b+offset])
-                playerArray.append(deaths[b+offset])
-                playerArray.append(adr[b+offset])
-                playerArray.append(kast[b+offset])
-                playerArray.append(rating[b+offset])
+                playerArray.append(players[b + offset])
+                playerArray.append(kills[b + offset])
+                playerArray.append(deaths[b + offset])
+                playerArray.append(adr[b + offset])
+                playerArray.append(kast[b + offset])
+                playerArray.append(rating[b + offset])
                 playerArray.append(matchID)
                 masterArray.append(playerArray)
             for b in range(5, 10):
                 playerArray = []
                 playerArray.append(maps[i])
-                playerArray.append(players[b+offset])
-                playerArray.append(kills[b+offset])
-                playerArray.append(deaths[b+offset])
-                playerArray.append(adr[b+offset])
-                playerArray.append(kast[b+offset])
-                playerArray.append(rating[b+offset])
+                playerArray.append(players[b + offset])
+                playerArray.append(kills[b + offset])
+                playerArray.append(deaths[b + offset])
+                playerArray.append(adr[b + offset])
+                playerArray.append(kast[b + offset])
+                playerArray.append(rating[b + offset])
                 playerArray.append(matchID)
                 masterArray.append(playerArray)
         except IndexError:

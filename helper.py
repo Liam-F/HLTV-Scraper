@@ -141,7 +141,7 @@ def get_new_iterable_items(page, startID):
         if html is None:
             check = False
         else:
-            sys.stdout.write('\r'+f"New {page} found: {startID}")
+            sys.stdout.write('\r' + f"New {page} found: {startID}")
             sys.stdout.flush()
             array.append(startID)
     print(f"\nFound {len(array)} new {page}s.")
