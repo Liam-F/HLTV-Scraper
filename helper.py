@@ -22,14 +22,14 @@ def scrape(array, function, threads):
         # Break out of the loop if all tasks are done or if there is only one task
         if (completed == len(array)):
             sys.stdout.flush()
-            sys.stdout.write('\r'+"")
+            sys.stdout.write('\r' + "")
             sys.stdout.flush()
             break
 
         # Avoid a ZeroDivisionError
         if completed > 0:
             sys.stdout.flush()
-            sys.stdout.write('\r'+f"{completed/len(array)*100:.0f}% done. {len(array)-completed} left. ")
+            sys.stdout.write('\r' + f"{completed/len(array)*100:.0f}% done. {len(array)-completed} left. ")
             sys.stdout.flush()
         sys.stdout.flush()
 
@@ -181,7 +181,7 @@ def tests():
 
     # Add the single match ID to an array
     matchID = []
-    matchID.append(sys.argv[sys.argv.index('test')+1])
+    matchID.append(sys.argv[sys.argv.index('test') + 1])
 
     # Tell the user what we are parsing
     print(f"\nBeginning test scrape for {matchID[0]}:\n")
@@ -198,7 +198,7 @@ def tests():
 
     # Handle match lineup
     lineup = scrape(matchID, get_match_lineups, threads)
-    for i in range(0, len(lineup[0])-1):
+    for i in range(0, len(lineup[0]) - 1):
         lineup[0][i] = csv_lookup('players', lineup[0][i], 2, 0)[1:]
 
     # Handle player stats
