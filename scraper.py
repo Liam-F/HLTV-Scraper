@@ -14,6 +14,7 @@ def get_event_names(eventID):
     eventType = re.findall('title=\".*\">.*</span></td>', html)
     eventNames = re.findall('<div class=\"eventname\">.*</div>', html)
     eventEndDate = re.findall('data-unix=\".*\">', html)
+    eventPrize = re.findall('\$.*</td>', html)
 
     # Parse the eventType
     if len(eventType) > 0:
@@ -34,12 +35,19 @@ def get_event_names(eventID):
     else:
         eventEndDate.append(0)
 
+    # Parse the eventPrize
+    if len(eventPrize) > 0:
+        eventPrize[0] = (eventPrize[0].replace("$", "")).replace("</td>", "")
+    else:
+        eventPrize.append(0)
+
     # Make an array for pool.map to process
     result = []
     result.append(eventType[0])
     result.append(eventNames[0])
     result.append(eventEndDate[0])
     result.append(eventID)
+    result.append(eventPrize[0])
     return result
 
 
