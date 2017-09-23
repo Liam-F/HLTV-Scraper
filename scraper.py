@@ -51,6 +51,38 @@ def get_event_names(eventID):
     return result
 
 
+def get_event_rewards(eventID):
+    html = get_html("https://www.hltv.org/events/%s/a" % (eventID))
+    if html is None:
+        print(f"Failed for {eventID}")
+        return []
+
+    # Find the total prize and prize winners
+    eventPrizes = re.findall('class=\"prizeMoney\">\$.*<', html)
+    prizeWinners = re.findall('/team.logo/.*\" class', html)
+
+    # Parse the eventEndDate
+    if len(eventPrizes) > 0:
+        for prize in range(0, len(eventPrizes)):
+            eventPrizes[prize] = (eventPrizes[prize].split('$')[1]).replace("<", "")
+    else:
+        eventPrizes.append(0)
+
+    # Parse the eventPrize
+    if len(prizeWinners) > 0:
+        for prize in range(0, len(prizeWinners)):
+            prizeWinners[prize] = (prizeWinners[prize].split('/')[3]).replace("\" class", "")
+    else:
+        prizeWinners.append(0)
+
+    # Make an array for pool.map to process
+    result = []
+    result.append(eventID)
+    result.append(eventPrizes)
+    result.append(prizeWinners[:len(eventPrizes)])
+    return result
+
+
 def get_match_events(matchID):
     html = get_html(f"https://www.hltv.org/matches/{matchID}")
     if html is None:
