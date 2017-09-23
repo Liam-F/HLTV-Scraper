@@ -3,9 +3,6 @@ from scraper import *
 from helper import *
 
 
-dont_execute = False
-
-
 # Define number of threads to use
 threads = 32
 # Set to True to activate tabulation and False to disable it.
@@ -14,9 +11,6 @@ tab = not check_args('notab', sys.argv)
 # Make an array of existing Match and Event IDs
 existingMatchIDs = get_existing_data("matchIDs", 1)
 existingEventIDs = get_existing_data("eventIDs", 3)
-
-event_rewards = scrape(existingEventIDs[100:200], get_event_rewards, threads)
-tabulate("eventPrizes", event_rewards)
 
 # Get the last ID so we know when to stop looking
 newMatchIDs = get_match_ids(existingMatchIDs[-1])
@@ -39,7 +33,7 @@ elif check_args('check', sys.argv):
 elif check_args('temp', sys.argv):
     pass
 
-elif dont_execute:
+else:
     # Step 1: add new matches to the event join table
     events = get_existing_data("joinMatchEvent", 0)
     matchesToCheck = remove_existing_data(events, un_dimension(newMatchIDs, 1), 'matches')
@@ -72,7 +66,15 @@ elif dont_execute:
     newPlayers = get_new_iterable_items("player", find_max("players", 2))
     newPlayers = scrape(newPlayers, get_players, threads)
 
-    # Step 8: Tabulate
+    # Step 8: Check event data
+    if check_args('event', sys.argv):
+        event_rewards = scrape(existingEventIDs, get_event_rewards, threads)
+        event_winners = scrape(existingEventIDs, get_event_winners, threads)
+    else:
+        event_rewards = []
+        event_winners = []
+
+    # Step 9: Tabulate
     if tab:
         tabulate("matchIDs", newMatchIDs)
         tabulate("joinMatchEvent", newEvents)
@@ -82,8 +84,10 @@ elif dont_execute:
         tabulate("eventIDs", newEventIDs)
         tabulate("teams", newTeams)
         tabulate("players", newPlayers)
+        tabulate("eventWinners", event_winners)
+        tabulate("eventPrizes", event_rewards)
 
-    # Step 9: Debug
+    # Step 10: Debug
     if check_args('debug', sys.argv):
         print_array("New matches", matchesToCheck, 1)
         print_array("Match lineups", newMatchLineups, 1)
