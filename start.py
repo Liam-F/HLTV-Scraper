@@ -1,4 +1,5 @@
 from getMatchIDs import get_match_ids
+from getFinishedEvents import get_finished_events
 from scraper import *
 from helper import *
 
@@ -11,26 +12,26 @@ tab = not check_args('notab', sys.argv)
 # Make an array of existing Match and Event IDs
 existingMatchIDs = get_existing_data("matchIDs", 1)
 existingEventIDs = get_existing_data("eventIDs", 3)
+existing_completed_events = get_existing_data("completedEvents", 0)
 
 # Get the last ID so we know when to stop looking
 newMatchIDs = get_match_ids(existingMatchIDs[-1])
+new_completed_events = get_finished_events(existing_completed_events[-1])
 
 # Run all tests for a specific Match ID
 if check_args('test', sys.argv):
     tests()
     pass
 
-elif len(newMatchIDs) < 1:
-    print("No new matches found!")
+# Exit if there are no new matches
+elif len(newMatchIDs) < 1 and len(new_completed_events) < 1:
+    print("No new matches or events found!")
 
 # Just check for new matches and break out of the loop
 elif check_args('check', sys.argv):
-    print(f"{len(newMatchIDs)} new matches to tabulate")
+    print(f"{len(newMatchIDs)} new matches and {len(new_completed_events)} completed events to tabulate.")
     if check_args('debug', sys.argv):
         print_array("New matches", newMatchIDs, 0)
-    pass
-
-elif check_args('temp', sys.argv):
     pass
 
 else:
@@ -67,12 +68,8 @@ else:
     newPlayers = scrape(newPlayers, get_players, threads)
 
     # Step 8: Check event data
-    if check_args('event', sys.argv):
-        event_rewards = scrape(existingEventIDs, get_event_rewards, threads)
-        event_winners = scrape(existingEventIDs, get_event_winners, threads)
-    else:
-        event_rewards = []
-        event_winners = []
+    event_rewards = scrape(un_dimension(new_completed_events, 0), get_event_rewards, threads)
+    event_winners = scrape(un_dimension(new_completed_events, 0), get_event_winners, threads)
 
     # Step 9: Tabulate
     if tab:
@@ -84,8 +81,9 @@ else:
         tabulate("eventIDs", newEventIDs)
         tabulate("teams", newTeams)
         tabulate("players", newPlayers)
-        tabulate("eventWinners", event_winners)
+        tabulate("completedEvents", new_completed_events)
         tabulate("eventPrizes", event_rewards)
+        tabulate("eventWinners", event_winners)
 
     # Step 10: Debug
     if check_args('debug', sys.argv):

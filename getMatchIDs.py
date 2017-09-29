@@ -2,10 +2,9 @@ from html import get_html
 import re
 
 
-print("Initialized script.")
-
-
 def get_match_ids(stop):
+    print("Looking for new completed matches.")
+
     # Create an offset variable for lists that are paginated on HLTV
     offset = 0
 

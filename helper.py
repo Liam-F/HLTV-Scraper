@@ -50,7 +50,7 @@ def add_new_line(file):
 
 
 def tabulate(csvFile, array):
-    if len(array) > 1:
+    if len(array) > 0:
         # Files must be in the csv directory inside the project folder
         # Opens the CSV file
         with open(f"csv/{csvFile}.csv", 'a', newline='', encoding='utf-8') as f:
