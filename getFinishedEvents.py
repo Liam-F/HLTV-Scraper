@@ -17,7 +17,7 @@ def get_finished_events(stop=0):
     # Ensure we loop through the proper number of pages
     html = get_html('https://www.hltv.org/events/archive')
     num_pages = int(find_num_pages(html))
-    page = 0
+    page = 1
 
     # Loop through the pages of finished events
     for i in range(num_pages - 1):

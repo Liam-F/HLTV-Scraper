@@ -29,7 +29,7 @@ elif len(newMatchIDs) < 1 and len(new_completed_events) < 1:
 
 # Just check for new matches and break out of the loop
 elif check_args('check', sys.argv):
-    print(f"{len(newMatchIDs)} new matches and {len(new_completed_events)} completed events to tabulate.")
+    print(f"{len(newMatchIDs)} matches and {len(new_completed_events)} completed events to tabulate.")
     if check_args('debug', sys.argv):
         print_array("New matches", newMatchIDs, 0)
     pass
