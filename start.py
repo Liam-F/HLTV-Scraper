@@ -32,7 +32,7 @@ elif check_args('check', sys.argv):
     print(f"{len(newMatchIDs)} matches and {len(new_completed_events)} completed events to tabulate.")
     if check_args('debug', sys.argv):
         print_array('New matches', newMatchIDs, 0)
-        print_array('New events', new_completed_events, 0)
+        print_array('New events', new_completed_events, 1)
     pass
 
 else:
