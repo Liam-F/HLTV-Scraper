@@ -323,6 +323,53 @@ def get_match_lineups(matchID):
         return []
 
 
+def get_match_map_bans(matchID):
+    html = get_html(f"https://www.hltv.org/matches/{matchID}")
+    if html is None:
+        print(f"Failed for {matchID}")
+        return []
+
+    # Get all of the picks and bans for a match
+    raw_picks_and_bans = re.findall('<div>.\..*<', html)
+
+    # Clean raw_picks_and_bans
+    picks_and_bans = []
+    for item in raw_picks_and_bans:
+        picks_and_bans.append(item.split(' ')[1:])
+        # Get the last item of the array in the array we just appended to remove the <
+        picks_and_bans[-1][-1] = picks_and_bans[-1][-1].replace('<' , '')
+
+    # Make an array for pool.map to process
+    master_array = []
+    if len(picks_and_bans) > 0:
+        index = 1
+        for choice in picks_and_bans:
+            # For the items of length 3, we get [Team, type, Map]
+            if len(choice) == 3:
+                array = []
+                array.append(matchID)
+                array.append(choice[0])
+                array.append(index)
+                array.append(choice[1])
+                array.append(choice[2])
+                master_array.append(array)
+                index += 1
+            if len(choice) == 4:
+                # For the items of length 4 we get [Map, wasm left, over] so this is randomized
+                array = []
+                array.append(matchID)
+                array.append('')
+                array.append(index)
+                array.append('random')
+                array.append(choice[0])
+                master_array.append(array)
+                index += 1
+    else:
+        print(f"No picks for {matchID}")
+        return []
+    return master_array
+
+
 def get_players(playerID):
     html = get_html(f"https://www.hltv.org/player/{playerID}/a")
     if html is None:
