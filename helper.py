@@ -6,12 +6,14 @@ import sys
 
 
 def scrape(array, function, threads):
-    # Define the number of threads
+    # Define the number of threads, use less than or equal to the defined value
+    count_threads = min(threads, len(array))
     pool = ThreadPool(threads)
+
     # Tell the user what is happening
     print(f"Scraping {len(array)} items using {function} on {threads} threads.")
-    # Calls function() and adds the filesize returned each call to an array called filesizes
 
+    # Calls function() and adds the filesize returned each call to an array
     result = (pool.imap_unordered(function, array))
     pool.close()
 
