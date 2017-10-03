@@ -54,31 +54,36 @@ else:
     # This returns a single array for each match with all of the player stats, so we un-array it
     newPlayerStats = fix_player_stats(newPlayerStats)
 
-    # Step 5: Add new events to eventIDs.csv
+    # Step 5: Update picksAndBans.csv
+    raw_picks_and_bans = scrape(matchesToCheck, get_match_map_bans, threads)
+    picks_and_bans = fix_player_stats(raw_picks_and_bans)
+
+    # Step 6: Add new events to eventIDs.csv
     eventsToCheck = remove_existing_data(existingEventIDs, un_dimension(newEvents, 1), 'events')
     newEventIDs = scrape(eventsToCheck, get_event_names, threads)
     if len(newEventIDs) < 1:
         print("No new event IDs to add!")
 
-    # Step 6: Update teams.csv
+    # Step 7: Update teams.csv
     newTeams = get_new_iterable_items("team", find_max("teams", 2))
     newTeams = scrape(newTeams, get_teams, threads)
 
-    # Step 7: Update players.csv
+    # Step 8: Update players.csv
     newPlayers = get_new_iterable_items("player", find_max("players", 2))
     newPlayers = scrape(newPlayers, get_players, threads)
 
-    # Step 8: Check event data
+    # Step 9: Check event prize data for eventPrizes.csv and eventWinners.csv
     event_rewards = scrape(un_dimension(new_completed_events, 0), get_event_rewards, threads)
     event_winners = scrape(un_dimension(new_completed_events, 0), get_event_winners, threads)
 
-    # Step 9: Tabulate
+    # Step 10: Tabulate
     if tab:
         tabulate("matchIDs", newMatchIDs)
         tabulate("joinMatchEvent", newEvents)
         tabulate("matchLineups", newMatchLineups)
         tabulate("matchResults", newMatchInfo)
         tabulate("playerStats", newPlayerStats)
+        tabulate("picksAndBans", picks_and_bans)
         tabulate("eventIDs", newEventIDs)
         tabulate("teams", newTeams)
         tabulate("players", newPlayers)
@@ -86,7 +91,7 @@ else:
         tabulate("eventPrizes", event_rewards)
         tabulate("eventWinners", event_winners)
 
-    # Step 10: Debug
+    # Step 11: Debug
     if check_args('debug', sys.argv):
         print_array("New matches", matchesToCheck, 1)
         print_array("Match lineups", newMatchLineups, 1)
