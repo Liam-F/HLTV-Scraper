@@ -377,7 +377,9 @@ def get_match_map_bans(matchID):
                 master_array.append(array)
                 index += 1
     else:
-        print(f"No picks for {matchID}")
+        # print(f"No picks for {matchID}")
+        # Too many BO1s to call out an error here
+        pass
         return []
     return master_array
 
