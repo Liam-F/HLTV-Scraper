@@ -333,11 +333,22 @@ def get_match_map_bans(matchID):
     raw_picks_and_bans = re.findall('<div>.\..*<', html)
 
     # Clean raw_picks_and_bans
+    pick_type = [' picked ', ' removed ', ' was left over', "random"]
     picks_and_bans = []
+
     for item in raw_picks_and_bans:
-        picks_and_bans.append(item.split(' ')[1:])
-        # Get the last item of the array in the array we just appended to remove the <
-        picks_and_bans[-1][-1] = picks_and_bans[-1][-1].replace('<' , '')
+
+        # Clean the resultant text
+        item_clean = re.sub('<div>...', '', item)
+        item_clean = item_clean.replace('<', '')
+        # For each pick type, get the proper information for the array
+        for pick in pick_type:
+            if pick in item_clean:
+                item = list(item_clean.partition(pick))
+
+                # Remove trailing space
+                item[1] = item[1].replace(' ', '')
+        picks_and_bans.append(item)
 
     # Make an array for pool.map to process
     master_array = []
@@ -345,7 +356,7 @@ def get_match_map_bans(matchID):
         index = 1
         for choice in picks_and_bans:
             # For the items of length 3, we get [Team, type, Map]
-            if len(choice) == 3:
+            if len(choice) == 3 and 'wasleftover' not in choice and 'random' not in choice:
                 array = []
                 array.append(matchID)
                 array.append(choice[0])
@@ -354,8 +365,9 @@ def get_match_map_bans(matchID):
                 array.append(choice[2])
                 master_array.append(array)
                 index += 1
-            if len(choice) == 4:
-                # For the items of length 4 we get [Map, wasm left, over] so this is randomized
+
+            else:
+                # For the items of length 4 we get [Map, was, left, over] so this is randomized
                 array = []
                 array.append(matchID)
                 array.append('')
