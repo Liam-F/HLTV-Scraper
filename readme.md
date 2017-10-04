@@ -6,7 +6,7 @@ This is a multi-threaded Python scraper designed to pull data from HLTV.org and 
 
 Since this is written in pure Python, there are no dependencies to install. Simply clone the repository or download the zip file, then `cd` to the directory and run `python3 start.py`. There is a video demonstration [here](https://twitter.com/rxcs/status/883818154362675200) using the aliases described below.
 
-![](https://i.imgur.com/aLG7dD0.png)
+![](https://i.imgur.com/reaRbMH.png)
 
 ### Arguments
 
@@ -95,6 +95,14 @@ Next, the script parses the same new matches stored in `matchesToCheck` and find
 
 Each match has player stats for each map. The script looks for these statistics using the matches stored in `matchesToCheck` and appends the new data to `playerStats.csv`.
 
+## Getting Match Map Picks and Bans
+
+Each match from `matchesToCheck` is checked if it contains information about the teams’ picks and bans. This is tabulated to `picksAndBans.csv`.
+
 ## Updating Players and Teams
 
 Each player and team on HLTV has a unique identification number that increases as new players are added to the database. To find new players and teams, we get the maximum identifier value form the respective `.csv` file and iterate over it using `get_iterable_items()`. From there the relevant pages are scraped and tabulated to `players.csv` and `teams.csv`.
+
+## Updating Event Rewards and Winners
+
+When a new event populates HLTV’s event [archive](https://www.hltv.org/events/archive), the script checks that event and pulls the prize information and prize winners. They get tabulated to `eventPrizes` and `eventWinners` respectively.
