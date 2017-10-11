@@ -89,7 +89,7 @@ def find_max(csvFile, colNum):
     return max(array)
 
 
-def remove_existing_data(existing, new, item):
+def remove_existing_data(existing: list, new: list, item: str):
     # Remove data we already have from the list of new data to parse
     for i in new[:]:
         if i in existing:

@@ -17,6 +17,8 @@ existing_completed_events = get_existing_data("completedEvents", 0)
 # Get the last ID so we know when to stop looking
 newMatchIDs = get_match_ids(existingMatchIDs[-1])
 new_completed_events = get_finished_events(existing_completed_events[-1])
+completed_events_to_check = remove_existing_data(existing_completed_events, un_dimension(new_completed_events, 0), 'events')
+print(completed_events_to_check)
 
 # Run all tests for a specific Match ID
 if check_args('test', sys.argv):
