@@ -18,7 +18,6 @@ existing_completed_events = get_existing_data("completedEvents", 0)
 newMatchIDs = get_match_ids(existingMatchIDs[-1])
 new_completed_events = get_finished_events(existing_completed_events[-1])
 completed_events_to_check = remove_existing_data(existing_completed_events, un_dimension(new_completed_events, 0), 'events')
-print(completed_events_to_check)
 
 # Run all tests for a specific Match ID
 if check_args('test', sys.argv):
@@ -75,8 +74,8 @@ else:
     newPlayers = scrape(newPlayers, get_players, threads)
 
     # Step 9: Check event prize data for eventPrizes.csv and eventWinners.csv
-    event_rewards = scrape(un_dimension(new_completed_events, 0), get_event_rewards, threads)
-    event_winners = scrape(un_dimension(new_completed_events, 0), get_event_winners, threads)
+    event_rewards = scrape(completed_events_to_check, get_event_rewards, threads)
+    event_winners = scrape(completed_events_to_check, get_event_winners, threads)
 
     # Step 10: Tabulate
     if tab:
@@ -101,3 +100,5 @@ else:
         print_array("Player stats", newPlayerStats, 1)
         print_array("New teams", newTeams, 1)
         print_array("New players", newPlayers, 1)
+        print_array("New event prizes", event_rewards, 0)
+        print_array("New event winners", event_winners, 0)
