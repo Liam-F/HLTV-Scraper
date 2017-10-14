@@ -17,7 +17,6 @@ existing_completed_events = get_existing_data("completedEvents", 0)
 # Get the last ID so we know when to stop looking
 newMatchIDs = get_match_ids(existingMatchIDs[-1])
 new_completed_events = get_finished_events(existing_completed_events[-1])
-completed_events_to_check = remove_existing_data(existing_completed_events, un_dimension(new_completed_events, 0), 'events')
 
 # Run all tests for a specific Match ID
 if check_args('test', sys.argv):
@@ -33,7 +32,7 @@ elif check_args('check', sys.argv):
     print(f"{len(newMatchIDs)} matches and {len(new_completed_events)} completed events to tabulate.")
     if check_args('debug', sys.argv):
         print_array('New matches', newMatchIDs, 0)
-        print_array('New events', new_completed_events, 1)
+        print_array('New completed events', new_completed_events, 1)
     pass
 
 else:
@@ -74,6 +73,7 @@ else:
     newPlayers = scrape(newPlayers, get_players, threads)
 
     # Step 9: Check event prize data for eventPrizes.csv and eventWinners.csv
+    completed_events_to_check = remove_existing_data(existing_completed_events, un_dimension(new_completed_events, 0), 'events')
     event_rewards = scrape(completed_events_to_check, get_event_rewards, threads)
     event_winners = scrape(completed_events_to_check, get_event_winners, threads)
 
