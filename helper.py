@@ -8,6 +8,8 @@ import sys
 def scrape(array, function, threads):
     # Define the number of threads, use less than or equal to the defined value
     count_threads = min(threads, len(array))
+    if count_threads == 0:
+            return []
     pool = ThreadPool(count_threads)
 
     # Tell the user what is happening
@@ -214,3 +216,5 @@ def tests():
     print_array("Map results", matchInfo, 1)
     print_array("Match lineup", lineup, 1)
     print_array("Player stats", stats, 1)
+    print_array("New event prizes", event_rewards)
+
