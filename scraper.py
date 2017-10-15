@@ -169,9 +169,10 @@ def get_match_info(matchID):
         return []
 
     # Find the match date
-    if len(date) > 0:
-        date[0] = (date[0].replace("data-unix=\"", "")).replace("\"", "")[:-3]
-        date[0] = datetime.utcfromtimestamp(int(date[0])).strftime('%Y-%m-%d')
+    if len(date) > 2:
+        date = date[1]
+        date = (date.replace("data-unix=\"", "")).replace("\"", "")[:-3]
+        date = datetime.utcfromtimestamp(int(date)).strftime('%m/%d/%Y')
     else:
         date.append(0)
 
@@ -251,7 +252,7 @@ def get_match_info(matchID):
         for i in range(0, len(scores)):
             # Create a temp array so that each map's stats are each contained in their own array
             tempArray = []
-            tempArray.append(date[0])
+            tempArray.append(date)
             tempArray.append(map[i])
             tempArray.append(teamIDs[0])
             tempArray.append(sides[sideCount])
@@ -269,7 +270,7 @@ def get_match_info(matchID):
             result.append(tempArray)
             sideCount += 2
     else:
-        result.append(date[0])
+        result.append(date)
         result.append(map[0])
         result.append(teamIDs[0])
         result.append(sides[0])
