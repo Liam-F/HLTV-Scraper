@@ -172,7 +172,7 @@ def get_match_info(matchID):
     if len(date) > 2:
         date = date[1]
         date = (date.replace("data-unix=\"", "")).replace("\"", "")[:-3]
-        date = datetime.utcfromtimestamp(int(date)).strftime('%m/%d/%Y')
+        date = datetime.utcfromtimestamp(int(date)).strftime('%m/%d/%y')
     else:
         date.append(0)
 
