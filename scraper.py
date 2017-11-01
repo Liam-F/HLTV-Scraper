@@ -126,6 +126,9 @@ def get_teams(teamID):
     teamName = re.findall('<div><span class=\"subjectname\">.*</span><br><i', html)
     if len(teamName) < 1:
         return []
+    teamRanked = re.findall('<a href=\"\/ranking\/teams\">Ranked #(.*)<\/a>', html)
+    if len(teamRanked) < 1:
+        teamRanked = [None]
     teamCountry = re.findall('fa fa-map-marker\" aria-hidden=\"true\"></i>.*<', html)
     if len(teamCountry) < 1:
         teamCountry = re.findall('fa fa-map-marker\" aria-hidden=\"true\"></i>.*</div>', html)
@@ -147,6 +150,7 @@ def get_teams(teamID):
     array.append(teamName[0])
     array.append(teamCountry[0])
     array.append(teamID)
+    array.append(teamRanked[0])
 
     return array
 
