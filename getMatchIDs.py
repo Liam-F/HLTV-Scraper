@@ -6,7 +6,7 @@ def get_match_ids(stop):
     print("Looking for new completed matches.")
 
     # Create an offset variable for lists that are paginated on HLTV
-    offset = 0
+    offset = 1
 
     # Create an array of all of the Demo URLs on the page
     matchIDs = find_match_ids_at_url("https://www.hltv.org/results?offset=%s" % (offset))
