@@ -5,17 +5,21 @@ import re
 def get_match_ids(stop):
     print("Looking for new completed matches.")
 
-    # Create an offset variable for lists that are paginated on HLTV
-    offset = 0
+    # Create an offset variable for lists that are paginated on HLTV; see #10 for why this is a string
+    offset = '001'
 
     # Create an array of all of the Demo URLs on the page
     matchIDs = find_match_ids_at_url("https://www.hltv.org/results?offset=%s" % (offset))
 
     # Determine if we need to paginate and create a variable to keep track of pages
     morePages = end_check(matchIDs, stop)
+
+    # Convert offset back to an int to iterate it; see #10
+    offset = int(offset)
     page = 1
     length = len(matchIDs)
     print(f"Parsed page {page}. {length} IDs found so far.")
+
     while morePages:
         # Offset by 100 to get the next 100 matches
         offset += 100
