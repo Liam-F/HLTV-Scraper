@@ -1,12 +1,7 @@
 from urllib.request import Request, urlopen
 import urllib.request
 import re
-htmlCache = [[], []]
-
-
-def cache_html(url, html):
-    htmlCache[0].append(url)
-    htmlCache[1].append(html)
+html_cache = {}
 
 
 def get_html(url):
@@ -14,9 +9,9 @@ def get_html(url):
     request = Request(url)
     request.add_header('User-Agent', 'Mozilla/5.0')
     # Read the response as HTML
-    if url in htmlCache[0]:
+    if url in html_cache:
         # If the URL is in the cache, get its HTML
-        return htmlCache[1][htmlCache[0].index(url)]
+        return html_cache[url]
     try:
         urlopen(request).read()
         html = urlopen(request).read().decode('ascii', 'ignore')
@@ -26,7 +21,7 @@ def get_html(url):
             return None
         else:
             # Cache the HTML data and return the HTML
-            cache_html(url, html)
+            html_cache[url] = html
             return html
 
     # Handle any other errors
